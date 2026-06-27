@@ -9,6 +9,7 @@ jobs:
   android:
     name: Android (APK)
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.event.head_commit.message == 'bump version')
     permissions:
       contents: write
     steps:
