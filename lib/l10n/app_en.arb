@@ -1,0 +1,275 @@
+{
+  "@@locale": "en",
+  "appTitle": "WAVE",
+
+  "@@nav": {
+    "description": "Bottom navigation labels"
+  },
+  "navHome": "Home",
+  "navDiscover": "Discover",
+  "navSearch": "Search",
+  "navLibrary": "Library",
+
+  "@@search": {
+    "description": "Search screen"
+  },
+  "searchHint": "Search artists, songs, albums...",
+  "searchRecent": "Recent",
+  "searchTracks": "Tracks",
+  "searchArtists": "Artists",
+  "searchAlbums": "Albums",
+  "searchPlaylists": "Playlists",
+  "searchNoMatches": "No matches",
+  "searchNoMatchesSubtitle": "Try a different artist, album or song.",
+  "searchFailed": "Search failed. Tap retry.",
+
+  "@@home": {
+    "description": "Home screen"
+  },
+  "homeLateNight": "Late night listen",
+  "homeGoodMorning": "Good morning",
+  "homeGoodAfternoon": "Good afternoon",
+  "homeGoodEvening": "Good evening",
+  "homeTrendingNow": "Trending now",
+  "homeMadeForYou": "Made for you",
+  "homeNewReleases": "New releases",
+  "homeTopArtists": "Top artists",
+  "homeMixes": "Mixes",
+  "homeEditorialPicks": "Editorial picks",
+  "homeRecentlyPlayed": "Recently played",
+  "homeRecommendedTracks": "Recommended tracks",
+  "homeRemoveFromRecent": "Remove from recently played",
+
+  "@@library": {
+    "description": "Library screen"
+  },
+  "libraryYourLibrary": "Your library",
+  "libraryLiked": "Liked",
+  "libraryAlbums": "Albums",
+  "libraryPlaylists": "Playlists",
+  "libraryFollowing": "Following",
+  "libraryDownloads": "Downloads",
+  "libraryNothingLiked": "Nothing liked yet",
+  "libraryNothingLikedSubtitle": "Tap the heart on any song to save it here.",
+  "libraryNoAlbums": "No saved albums",
+  "libraryNoAlbumsSubtitle": "Albums you save will appear here.",
+  "libraryNoPlaylists": "No playlists yet",
+  "libraryNoPlaylistsSubtitle": "Tap \"Create playlist\" or like a playlist to save it here.",
+  "libraryMyPlaylists": "My Playlists",
+  "libraryLikedPlaylists": "Liked Playlists",
+  "libraryNoFollowing": "No artists followed",
+  "libraryNoFollowingSubtitle": "Follow an artist to see them here.",
+  "libraryNoDownloads": "No downloads",
+  "libraryNoDownloadsSubtitle": "Downloaded tracks for offline play will appear here.",
+  "libraryCreatePlaylist": "Create playlist",
+  "libraryImportPlaylist": "Import playlist",
+  "libraryNewPlaylist": "New playlist",
+  "libraryPlaylistName": "Playlist name",
+  "libraryDescriptionOptional": "Description (optional)",
+  "libraryCancel": "CANCEL",
+  "libraryCreate": "CREATE",
+  "libraryShuffle": "Shuffle",
+  "libraryPlay": "Play",
+  "libraryUnlike": "Unlike",
+  "libraryQueue": "Queue",
+  "librarySortBy": "Sort by",
+  "libraryRecentlyLiked": "Recently liked",
+  "libraryTitleAZ": "Title (A–Z)",
+  "libraryArtist": "Artist",
+  "libraryDuration": "Duration",
+  "librarySongsCount": "{count, plural, one{{count} song} other{{count} songs}}",
+  "libraryImportSuccess": "Successfully imported \"{title}\"",
+  "libraryImportFailed": "Import failed: {error}",
+  "libraryAddToQueue": "Add to queue",
+  "libraryAddToPlaylist": "Add to playlist",
+  "libraryGoToAlbum": "Go to album",
+  "libraryGoToArtist": "Go to artist",
+  "libraryShare": "Share",
+  "libraryRemoveFromLiked": "Remove from liked",
+
+  "@@player": {
+    "description": "Player related strings"
+  },
+  "playerNowPlaying": "Now playing",
+  "playerPlayingFrom": "PLAYING FROM",
+  "playerQueue": "Queue",
+  "playerCover": "COVER",
+  "playerLyrics": "LYRICS",
+  "playerTimer": "TIMER",
+  "playerNothingPlaying": "Nothing is playing",
+  "playerPlayNext": "Play next",
+  "playerAddToQueue": "Add to queue",
+  "playerAddToPlaylist": "Add to playlist",
+  "playerGoToAlbum": "Go to album",
+  "playerGoToArtist": "Go to artist",
+  "playerSleepTimer": "Sleep timer",
+  "playerSave": "Save",
+  "playerClear": "Clear",
+  "playerUpNext": "Up next",
+  "playerHistory": "History",
+  "playerRemoveFromQueue": "Remove from queue",
+  "playerPlay": "PLAY",
+
+  "@@lyrics": {
+    "description": "Lyrics view"
+  },
+  "lyricsUnavailable": "Lyrics unavailable",
+  "lyricsNone": "No lyrics for this track",
+  "lyricsProvidedBy": "Lyrics provided by LRCLIB",
+
+  "@@sleepTimer": {
+    "description": "Sleep timer dialog"
+  },
+  "sleepTimerTitle": "SLEEP TIMER",
+  "sleepTimerMinutes": "minutes",
+  "sleepTimerCancel": "CANCEL TIMER",
+  "sleepTimerStart": "START",
+
+  "@@update": {
+    "description": "Update dialog"
+  },
+  "updateAvailable": "UPDATE AVAILABLE",
+  "updateCurrent": "Current",
+  "updateLatest": "Latest",
+  "updateWhatsNew": "WHAT'S NEW",
+  "updateIosMessage": "iOS: You'll be redirected to GitHub to download the IPA",
+  "updateMacosMessage": "macOS: You'll be redirected to GitHub to download",
+  "updateDownloading": "Downloading...",
+  "updateLater": "Later",
+  "updateNow": "Update Now",
+  "updateFailed": "Update failed: {status}",
+  "updateDownloadFailed": "Download failed: {error}",
+  "updateDownloadComplete": "Download Complete",
+  "updateDownloadedTo": "Update downloaded to:",
+  "updateWindowsInstructions": "Close WAVE and run the installer to update.",
+  "updateLinuxInstructions": "Make the file executable and run it:\nchmod +x \"{fileName}\"\n./{fileName}",
+  "updateOpenFolder": "Open Folder",
+  "updateOk": "OK",
+
+  "@@common": {
+    "description": "Common UI strings"
+  },
+  "commonRetry": "RETRY",
+  "commonCancel": "CANCEL",
+  "commonDelete": "DELETE",
+  "commonSave": "SAVE",
+  "commonEdit": "EDIT",
+  "commonTitle": "Title",
+  "commonDescription": "Description",
+  "commonExplicit": "E",
+  "commonDurationPlaceholder": "--:--",
+  "commonUnknownArtist": "Unknown artist",
+  "commonAlbum": "Album",
+  "commonPlaylist": "Playlist",
+  "commonArtist": "Artist",
+  "commonTrack": "Track",
+  "commonTrackCount": "{count, plural, one{{count} track} other{{count} tracks}}",
+  "commonMonthlyListeners": "{count} monthly listeners",
+  "commonFollowers": "{count} followers",
+
+  "@@discover": {
+    "description": "Discover screen"
+  },
+  "discoverTitle": "Discover",
+  "discoverNewMusic": "New music",
+  "discoverCharts": "Charts",
+  "discoverFreshDrops": "Fresh drops",
+  "discoverNewThisWeek": "NEW THIS WEEK",
+  "discoverTop50Tracks": "Top 50 tracks",
+  "discoverTopAlbums": "Top albums",
+  "discoverTopPlaylists": "Top playlists",
+  "discoverPlayRadio": "PLAY RADIO",
+
+  "@@genre": {
+    "description": "Genre screen"
+  },
+  "genreLoadError": "Could not load genre tracks",
+  "genreInvalid": "Invalid genre",
+
+  "@@artist": {
+    "description": "Artist screen"
+  },
+  "artistLoadError": "Could not load artist",
+  "artistTracksLoadError": "Could not load tracks",
+  "artistDiscographyLoadError": "Could not load discography",
+  "artistRelatedLoadError": "Could not load related artists",
+  "artistFollowing": "FOLLOWING",
+  "artistFollow": "FOLLOW",
+  "artistPopular": "POPULAR",
+  "artistDiscography": "DISCOGRAPHY",
+  "artistRelated": "RELATED",
+  "artistAbout": "ABOUT",
+  "artistAboutSection": "About",
+  "artistMetadata": "{albums} albums · {fans}",
+
+  "@@album": {
+    "description": "Album screen"
+  },
+  "albumLoadError": "Could not load album",
+  "albumTracksLoadError": "Could not load tracks",
+  "albumLabel": "ALBUM",
+  "albumMoreFromArtist": "More from this artist",
+  "albumMetadata": "{tracks} tracks · {minutes}m",
+
+  "@@playlist": {
+    "description": "Playlist screen"
+  },
+  "playlistLoadError": "Could not load playlist",
+  "playlistTracksLoadError": "Could not load tracks",
+  "playlistLabel": "PLAYLIST",
+  "playlistBy": "by {creator}",
+  "playlistDeleteTitle": "Delete Playlist",
+  "playlistDeleteConfirm": "Are you sure you want to delete \"{name}\"? This cannot be undone.",
+  "playlistEdit": "EDIT",
+  "playlistDelete": "DELETE",
+  "playlistExportEmpty": "Cannot export an empty playlist.",
+  "playlistExported": "Saved to: {path}",
+  "playlistExportSuccess": "Playlist exported successfully!",
+
+  "@@settings": {
+    "description": "Settings screen"
+  },
+  "settingsTitle": "SETTINGS",
+  "settingsSubtitle": "Customize WAVE",
+  "settingsThemes": "Themes",
+  "settingsCrossfade": "Crossfade",
+  "settingsEqualizer": "Equalizer",
+  "settingsAbout": "About",
+  "settingsYou": "You",
+  "settingsEmail": "local@wave.app",
+  "settingsCrossfadeLabel": "Crossfade between tracks",
+  "settingsCrossfadeOff": "OFF",
+  "settingsCrossfadeValue": "{value}s",
+  "settingsEqReset": "RESET TO DEFAULT",
+  "settingsUpToDate": "WAVE is up to date!",
+  "settingsCheckUpdates": "Check for Updates",
+  "settingsVersion": "v1.0.3 · Build 3",
+
+  "@@albumScreen": {
+    "description": "Add to playlist sheet"
+  },
+  "addToPlaylistTitle": "Add to Playlist",
+  "addToPlaylistNew": "New Playlist",
+  "addToPlaylistHint": "Playlist name",
+  "addToPlaylistTrackCount": "{count} tracks",
+
+  "@@contextMenu": {
+    "description": "Context menu actions"
+  },
+  "contextPlayNext": "Play next",
+  "contextAddToQueue": "Add to queue",
+  "contextAddToPlaylist": "Add to playlist",
+  "contextGoToAlbum": "Go to album",
+  "contextGoToArtist": "Go to artist",
+  "contextRemoveFromLiked": "Remove from liked",
+  "contextAddToLiked": "Add to liked",
+  "contextRemoveFromQueue": "Remove from queue",
+  "contextShare": "Share",
+  "contextUnlike": "Unlike",
+
+  "@@playlistExchange": {
+    "description": "Playlist import/export"
+  },
+  "playlistExchangeInvalid": "Invalid WAVE playlist file.",
+  "playlistExchangeDefaultTitle": "Imported Playlist"
+}

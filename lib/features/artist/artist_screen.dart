@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
+import '../../generated/app_localizations.dart';
 import '../../core/api/deezer_providers.dart';
 import '../../core/api/models/deezer_album.dart';
 import '../../core/api/models/deezer_artist.dart';
@@ -41,7 +42,7 @@ class _ArtistScreenState extends ConsumerState<ArtistScreen> {
         error: (e, _) => SafeArea(
           child: Center(
             child: InlineError(
-              message: 'Could not load artist',
+              message: AppLocalizations.of(context)!.artistLoadError,
               onRetry: () => ref.invalidate(artistProvider(widget.artistId)),
             ),
           ),
@@ -127,7 +128,7 @@ class _ArtistScreenState extends ConsumerState<ArtistScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  _formatFans(artist.nbFan),
+                  AppLocalizations.of(context)!.commonMonthlyListeners(_formatFans(artist.nbFan)),
                   style: TextStyle(
                     color: theme.onSurfaceMuted,
                     fontSize: 13,
@@ -197,7 +198,7 @@ class _PopularSliverList extends ConsumerWidget {
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: InlineError(
-            message: 'Could not load tracks',
+            message: AppLocalizations.of(context)!.artistTracksLoadError,
             onRetry: () => ref.invalidate(artistTopTracksProvider(artistId)),
           ),
         ),
@@ -244,7 +245,7 @@ class _DiscographySliverGrid extends ConsumerWidget {
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: InlineError(
-            message: 'Could not load discography',
+            message: AppLocalizations.of(context)!.artistDiscographyLoadError,
             onRetry: () => ref.invalidate(artistAlbumsProvider(artistId)),
           ),
         ),
@@ -295,7 +296,7 @@ class _RelatedSliverGrid extends ConsumerWidget {
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: InlineError(
-            message: 'Could not load related artists',
+            message: AppLocalizations.of(context)!.artistRelatedLoadError,
             onRetry: () => ref.invalidate(relatedArtistsProvider(artistId)),
           ),
         ),
@@ -320,16 +321,16 @@ class _RelatedSliverGrid extends ConsumerWidget {
 }
 
 String _formatFans(int? fans) {
-  if (fans == null || fans <= 0) return 'Artist';
+  if (fans == null || fans <= 0) return '0';
   if (fans >= 1000000) {
     final m = (fans / 1000000);
-    return '${m.toStringAsFixed(m >= 10 ? 0 : 1)}M monthly listeners';
+    return '${m.toStringAsFixed(m >= 10 ? 0 : 1)}M';
   }
   if (fans >= 1000) {
     final k = fans / 1000;
-    return '${k.toStringAsFixed(k >= 10 ? 0 : 1)}K monthly listeners';
+    return '${k.toStringAsFixed(k >= 10 ? 0 : 1)}K';
   }
-  return '$fans monthly listeners';
+  return fans.toString();
 }
 
 class _ActionRow extends ConsumerWidget {
@@ -385,7 +386,7 @@ class _ActionRow extends ConsumerWidget {
               ),
             ),
             child: Text(
-              following ? 'FOLLOWING' : 'FOLLOW',
+              following ? AppLocalizations.of(context)!.artistFollowing : AppLocalizations.of(context)!.artistFollow,
               style: TextStyle(
                 color: following ? theme.background : theme.onSurface,
                 fontSize: 11,
@@ -405,21 +406,21 @@ class _TabStrip extends StatelessWidget {
   final _ArtistTab active;
   final ValueChanged<_ArtistTab> onSelect;
 
-  static const Map<_ArtistTab, String> _labels = <_ArtistTab, String>{
-    _ArtistTab.popular: 'POPULAR',
-    _ArtistTab.discography: 'DISCOGRAPHY',
-    _ArtistTab.related: 'RELATED',
-    _ArtistTab.about: 'ABOUT',
-  };
-
   @override
   Widget build(BuildContext context) {
     final theme = AppThemeScope.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final labels = <_ArtistTab, String>{
+      _ArtistTab.popular: l10n.artistPopular,
+      _ArtistTab.discography: l10n.artistDiscography,
+      _ArtistTab.related: l10n.artistRelated,
+      _ArtistTab.about: l10n.artistAbout,
+    };
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
       child: Row(
-        children: _labels.entries.map((e) {
+        children: labels.entries.map((e) {
           final isActive = e.key == active;
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
@@ -466,7 +467,7 @@ class _About extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const SectionHeader(title: 'About'),
+          SectionHeader(title: AppLocalizations.of(context)!.artistAboutSection),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
             child: Text(
@@ -481,7 +482,7 @@ class _About extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Text(
-              '${artist.nbAlbum ?? 0} albums  ·  ${_formatFans(artist.nbFan)}',
+              AppLocalizations.of(context)!.artistMetadata((artist.nbAlbum ?? 0).toString(), _formatFans(artist.nbFan)),
               style: TextStyle(
                 color: theme.onSurfaceMuted,
                 fontSize: 13,

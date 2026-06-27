@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../core/theme/app_theme.dart';
+import '../generated/app_localizations.dart';
 
 /// Compact inline error widget used inside a section that failed to load.
 /// Spec rule: never a full-page error unless catastrophic.
@@ -46,7 +47,7 @@ class InlineError extends StatelessWidget {
                   vertical: 6,
                 ),
                 child: Text(
-                  'RETRY',
+                  AppLocalizations.of(context)!.commonRetry,
                   style: TextStyle(
                     color: theme.accent,
                     fontSize: 11,

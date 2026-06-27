@@ -7,6 +7,7 @@ import '../core/api/models/deezer_track.dart';
 import '../core/audio/player_providers.dart';
 import '../core/storage/library_providers.dart';
 import '../core/theme/app_theme.dart';
+import '../generated/app_localizations.dart';
 import 'context_menu.dart';
 
 /// Tracklist row used by Album / Playlist pages. Shows numbered position,
@@ -116,7 +117,7 @@ class DetailTrackRow extends ConsumerWidget {
             ],
             const SizedBox(width: 12),
             Text(
-              _fmtDuration(track.duration),
+              _fmtDuration(track.duration, context),
               style: TextStyle(
                 color: theme.onSurfaceMuted,
                 fontSize: 12,
@@ -159,19 +160,19 @@ class DetailTrackRow extends ConsumerWidget {
           icon: liked
               ? PhosphorIconsFill.heart
               : PhosphorIconsRegular.heart,
-          label: liked ? 'Remove from liked' : 'Add to liked',
+          label: liked ? AppLocalizations.of(context)!.contextRemoveFromLiked : AppLocalizations.of(context)!.contextAddToLiked,
           onTap: () =>
               ref.read(likedTracksProvider.notifier).toggle(track),
         ),
         ContextMenuItem(
           icon: PhosphorIconsRegular.queue,
-          label: 'Play next',
+          label: AppLocalizations.of(context)!.contextPlayNext,
           onTap: () =>
               ref.read(playerControlsProvider).addToQueueNext(track),
         ),
         ContextMenuItem(
           icon: PhosphorIconsRegular.playlist,
-          label: 'Add to queue',
+          label: AppLocalizations.of(context)!.contextAddToQueue,
           onTap: () =>
               ref.read(playerControlsProvider).addToQueueLast(track),
         ),
@@ -195,7 +196,7 @@ class _ExplicitBadge extends StatelessWidget {
         borderRadius: BorderRadius.circular(2),
       ),
       child: Text(
-        'E',
+        AppLocalizations.of(context)!.commonExplicit,
         style: TextStyle(
           color: theme.onSurfaceMuted,
           fontSize: 9,
@@ -207,8 +208,8 @@ class _ExplicitBadge extends StatelessWidget {
   }
 }
 
-String _fmtDuration(int? secs) {
-  if (secs == null || secs <= 0) return '--:--';
+String _fmtDuration(int? secs, BuildContext context) {
+  if (secs == null || secs <= 0) return AppLocalizations.of(context)!.commonDurationPlaceholder;
   final m = secs ~/ 60;
   final s = secs % 60;
   return '$m:${s.toString().padLeft(2, '0')}';

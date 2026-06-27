@@ -8,6 +8,7 @@ import '../../core/api/models/queue_state.dart';
 import '../../core/audio/player_providers.dart';
 import '../../core/theme/app_theme.dart';
 import '../context_menu.dart';
+import '../../generated/app_localizations.dart';
 
 /// The drag-up queue sheet shown over the Now Playing screen.
 class QueuePanel extends ConsumerWidget {
@@ -50,7 +51,7 @@ class QueuePanel extends ConsumerWidget {
             child: Row(
               children: <Widget>[
                 Text(
-                  'QUEUE',
+                  AppLocalizations.of(context)!.playerQueue,
                   style: TextStyle(
                     color: theme.onSurface,
                     fontSize: 12,
@@ -60,13 +61,13 @@ class QueuePanel extends ConsumerWidget {
                 ),
                 const Spacer(),
                 _SmallAction(
-                  label: 'Save',
+                  label: AppLocalizations.of(context)!.playerSave,
                   icon: PhosphorIconsRegular.bookmarkSimple,
                   onTap: () {},
                 ),
                 const SizedBox(width: 8),
                 _SmallAction(
-                  label: 'Clear',
+                  label: AppLocalizations.of(context)!.playerClear,
                   icon: PhosphorIconsRegular.trash,
                   destructive: true,
                   onTap: () => controls.clearQueue(),
@@ -98,7 +99,7 @@ class _QueueList extends ConsumerWidget {
       slivers: <Widget>[
         if (queue.current != null)
           SliverToBoxAdapter(
-            child: _Header(text: 'Now playing', color: theme.accent),
+            child: _Header(text: AppLocalizations.of(context)!.playerNowPlaying, color: theme.accent),
           ),
         if (queue.current != null)
           SliverToBoxAdapter(
@@ -110,7 +111,7 @@ class _QueueList extends ConsumerWidget {
           ),
         if (upcoming.isNotEmpty)
           SliverToBoxAdapter(
-            child: _Header(text: 'Up next', color: theme.onSurfaceMuted),
+            child: _Header(text: AppLocalizations.of(context)!.playerUpNext, color: theme.onSurfaceMuted),
           ),
         SliverReorderableList(
           itemCount: upcoming.length,
@@ -143,7 +144,7 @@ class _QueueList extends ConsumerWidget {
         ),
         if (queue.history.isNotEmpty)
           SliverToBoxAdapter(
-            child: _Header(text: 'History', color: theme.onSurfaceMuted),
+            child: _Header(text: AppLocalizations.of(context)!.playerHistory, color: theme.onSurfaceMuted),
           ),
         SliverList(
           delegate: SliverChildBuilderDelegate(
@@ -168,12 +169,12 @@ class _QueueList extends ConsumerWidget {
       items: <ContextMenuItem>[
         ContextMenuItem(
           icon: PhosphorIconsRegular.queue,
-          label: 'Play next',
+          label: AppLocalizations.of(context)!.playerPlayNext,
           onTap: () => ref.read(playerControlsProvider).addToQueueNext(t),
         ),
         ContextMenuItem(
           icon: PhosphorIconsRegular.x,
-          label: 'Remove from queue',
+          label: AppLocalizations.of(context)!.playerRemoveFromQueue,
           destructive: true,
           onTap: () {
             // The list rebuilds when service emits — index lookup at call time.

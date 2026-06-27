@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
+import '../../generated/app_localizations.dart';
 import '../../core/api/deezer_providers.dart';
 import '../../core/api/models/deezer_playlist.dart';
 import '../../core/api/models/deezer_track.dart';
@@ -81,7 +82,7 @@ class _PlaylistScreenState extends ConsumerState<PlaylistScreen> {
               ),
               error: (e, _) => Center(
                 child: InlineError(
-                  message: 'Could not load playlist',
+                  message: AppLocalizations.of(context)!.playlistLoadError,
                   onRetry: () =>
                       ref.invalidate(playlistProvider(widget.playlistId)),
                 ),
@@ -211,7 +212,7 @@ class _PlaylistScreenState extends ConsumerState<PlaylistScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(20),
                         child: InlineError(
-                          message: 'Could not load tracks',
+                          message: AppLocalizations.of(context)!.playlistTracksLoadError,
                           onRetry: () => ref.invalidate(
                               playlistTracksProvider(widget.playlistId)),
                         ),
@@ -244,7 +245,7 @@ class _PlaylistScreenState extends ConsumerState<PlaylistScreen> {
           ),
           const Spacer(),
           Text(
-            'PLAYLIST',
+            AppLocalizations.of(context)!.playlistLabel,
             style: TextStyle(
               color: theme.onSurfaceMuted,
               fontSize: 11,
@@ -317,12 +318,12 @@ class _PlaylistScreenState extends ConsumerState<PlaylistScreen> {
         ],
         const SizedBox(height: 6),
         Text(
-          <String>[
-            if ((pl.creator?.name ?? '').isNotEmpty) 'by ${pl.creator!.name}',
-            if ((pl.fans ?? 0) > 0) '${pl.fans} followers',
-            if ((pl.nbTracks ?? 0) > 0) '${pl.nbTracks} tracks',
-            if (mins > 0) '${mins}m',
-          ].join('  ·  '),
+            <String>[
+              if ((pl.creator?.name ?? '').isNotEmpty) AppLocalizations.of(context)!.playlistBy(pl.creator!.name),
+              if ((pl.fans ?? 0) > 0) AppLocalizations.of(context)!.commonFollowers(pl.fans.toString()),
+              if ((pl.nbTracks ?? 0) > 0) AppLocalizations.of(context)!.commonTrackCount(pl.nbTracks),
+              if (mins > 0) '${mins}m',
+            ].join('  ·  '),
           textAlign: TextAlign.center,
           style: TextStyle(
             color: theme.onSurfaceMuted,
@@ -340,7 +341,7 @@ class _PlaylistScreenState extends ConsumerState<PlaylistScreen> {
           controller: _titleCtrl..text = _titleCtrl.text.isEmpty
               ? pl.title
               : _titleCtrl.text,
-          hint: 'Title',
+          hint: AppLocalizations.of(context)!.commonTitle,
           fontSize: 20,
         ),
         const SizedBox(height: 10),
@@ -348,7 +349,7 @@ class _PlaylistScreenState extends ConsumerState<PlaylistScreen> {
           controller: _descCtrl..text = _descCtrl.text.isEmpty
               ? (pl.description ?? '')
               : _descCtrl.text,
-          hint: 'Description',
+          hint: AppLocalizations.of(context)!.commonDescription,
           fontSize: 12,
         ),
       ],
@@ -361,7 +362,7 @@ class _PlaylistScreenState extends ConsumerState<PlaylistScreen> {
       children: <Widget>[
         if (_editing) ...<Widget>[
           _PillButton(
-            label: 'CANCEL',
+            label: AppLocalizations.of(context)!.commonCancel,
             background: Colors.transparent,
             border: theme.onSurface.withValues(alpha: 0.2),
             color: theme.onSurface,
@@ -369,7 +370,7 @@ class _PlaylistScreenState extends ConsumerState<PlaylistScreen> {
           ),
           const SizedBox(width: 10),
           _PillButton(
-            label: 'SAVE',
+            label: AppLocalizations.of(context)!.commonSave,
             background: theme.accent,
             color: theme.background,
             onTap: () async {
@@ -385,7 +386,7 @@ class _PlaylistScreenState extends ConsumerState<PlaylistScreen> {
           ),
         ] else ...<Widget>[
           _PillButton(
-            label: 'EDIT',
+            label: AppLocalizations.of(context)!.playlistEdit,
             background: Colors.transparent,
             border: theme.onSurface.withValues(alpha: 0.2),
             color: theme.onSurface,
@@ -393,7 +394,7 @@ class _PlaylistScreenState extends ConsumerState<PlaylistScreen> {
           ),
           const SizedBox(width: 10),
           _PillButton(
-            label: 'DELETE',
+            label: AppLocalizations.of(context)!.playlistDelete,
             background: theme.error.withValues(alpha: 0.1),
             border: theme.error,
             color: theme.error,
@@ -403,25 +404,25 @@ class _PlaylistScreenState extends ConsumerState<PlaylistScreen> {
                 builder: (context) => AlertDialog(
                   backgroundColor: theme.surface,
                   title: Text(
-                    'Delete Playlist',
+                    AppLocalizations.of(context)!.playlistDeleteTitle,
                     style: TextStyle(color: theme.onSurface, fontWeight: FontWeight.bold),
                   ),
                   content: Text(
-                    'Are you sure you want to delete "${pl.title}"? This cannot be undone.',
+                    AppLocalizations.of(context)!.playlistDeleteConfirm(pl.title),
                     style: TextStyle(color: theme.onSurfaceMuted),
                   ),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(false),
                       child: Text(
-                        'CANCEL',
+                        AppLocalizations.of(context)!.commonCancel,
                         style: TextStyle(color: theme.onSurfaceMuted),
                       ),
                     ),
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(true),
                       child: Text(
-                        'DELETE',
+                        AppLocalizations.of(context)!.playlistDelete,
                         style: TextStyle(color: theme.error),
                       ),
                     ),
@@ -502,7 +503,7 @@ class _PlaylistScreenState extends ConsumerState<PlaylistScreen> {
     }
 
     if (tracks.isEmpty) {
-      snack('Cannot export an empty playlist.');
+      snack(AppLocalizations.of(context)!.playlistExportEmpty);
       return;
     }
 
@@ -526,9 +527,9 @@ class _PlaylistScreenState extends ConsumerState<PlaylistScreen> {
     // On desktop, FilePicker returns the path but doesn't write — do it here.
     try {
       await File(savePath).writeAsBytes(bytes);
-      snack('Saved to: $savePath');
+      snack(AppLocalizations.of(context)!.playlistExported(savePath));
     } catch (_) {
-      snack('Playlist exported successfully!');
+      snack(AppLocalizations.of(context)!.playlistExportSuccess);
     }
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../core/theme/app_theme.dart';
+import '../generated/app_localizations.dart';
 
 /// Custom replacement for `SearchBar` / AppBar search. Pure `TextField`
 /// wrapped in a themed pill with leading magnifier and trailing clear.
@@ -12,7 +13,7 @@ class WaveSearchBar extends StatelessWidget {
     required this.focusNode,
     required this.onChanged,
     required this.onSubmitted,
-    this.hint = 'Search artists, songs, albums…',
+    this.hint,
   });
 
   final TextEditingController controller;
@@ -63,7 +64,7 @@ class WaveSearchBar extends StatelessWidget {
                   isDense: true,
                   contentPadding: EdgeInsets.zero,
                   border: InputBorder.none,
-                  hintText: hint,
+                  hintText: hint ?? AppLocalizations.of(context)!.searchHint,
                   hintStyle: TextStyle(
                     color: theme.onSurfaceMuted,
                     fontSize: 14,

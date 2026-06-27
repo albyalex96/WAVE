@@ -6,6 +6,7 @@ import '../../core/api/models/deezer_track.dart';
 import '../../core/audio/lyrics_service.dart';
 import '../../core/audio/player_providers.dart';
 import '../../core/theme/app_theme.dart';
+import '../../generated/app_localizations.dart';
 
 /// Auto-scrolling lyrics view. Synced LRC: highlights the active line and
 /// allows tap-to-seek. Plain text: scroll-only.
@@ -41,10 +42,10 @@ class _LyricsViewState extends ConsumerState<LyricsView> {
           child: _BeatingDot(color: theme.accent),
         ),
       ),
-      error: (e, _) => _Empty(message: 'Lyrics unavailable', theme: theme),
+      error: (e, _) => _Empty(message: AppLocalizations.of(context)!.lyricsUnavailable, theme: theme),
       data: (lyrics) {
         if (lyrics.isEmpty) {
-          return _Empty(message: 'No lyrics for this track', theme: theme);
+          return _Empty(message: AppLocalizations.of(context)!.lyricsNone, theme: theme);
         }
         // Responsive sizing config
         final screenWidth = MediaQuery.of(context).size.width;
@@ -146,7 +147,7 @@ class _LyricsViewState extends ConsumerState<LyricsView> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 16),
                   child: Text(
-                    'Lyrics provided by LRCLIB',
+                    AppLocalizations.of(context)!.lyricsProvidedBy,
                     style: TextStyle(
                       color: theme.onSurfaceMuted,
                       fontSize: 10,

@@ -8,6 +8,7 @@ import '../../core/api/deezer_providers.dart';
 import '../../core/api/models/deezer_album.dart';
 import '../../core/router/app_router.dart';
 import '../../core/theme/app_theme.dart';
+import '../../generated/app_localizations.dart';
 import '../../widgets/content_cards.dart';
 import '../../widgets/section_header.dart';
 import '../../widgets/shimmer.dart';
@@ -34,7 +35,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
             child: Text(
-              'Discover',
+              AppLocalizations.of(context)!.discoverTitle,
               style: TextStyle(
                 color: theme.onSurface,
                 fontSize: 30,
@@ -44,7 +45,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
             ),
           ),
           _SubTabs(
-            labels: const <String>['New music', 'Charts'],
+            labels: <String>[AppLocalizations.of(context)!.discoverNewMusic, AppLocalizations.of(context)!.discoverCharts],
             active: _tab,
             onTap: (i) => setState(() => _tab = i),
           ),
@@ -157,7 +158,7 @@ class _NewMusicTab extends ConsumerWidget {
           slivers: <Widget>[
             SliverToBoxAdapter(child: _Hero(album: albums.first)),
             const SliverToBoxAdapter(
-              child: SectionHeader(title: 'Fresh drops'),
+              child: SectionHeader(title: AppLocalizations.of(context)!.discoverFreshDrops),
             ),
             SliverPadding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
@@ -254,7 +255,7 @@ class _Hero extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   Text(
-                    'NEW THIS WEEK',
+                    AppLocalizations.of(context)!.discoverNewThisWeek,
                     style: TextStyle(
                       color: theme.accent,
                       fontSize: 11,
@@ -331,7 +332,7 @@ class _ChartsTab extends ConsumerWidget {
             return SliverToBoxAdapter(
               child: Column(
                 children: <Widget>[
-                  const SectionHeader(title: 'Top 50 tracks'),
+                  SectionHeader(title: AppLocalizations.of(context)!.discoverTop50Tracks),
                   for (var i = 0; i < top.length; i++)
                     TrackRow(
                       track: top[i],
@@ -343,11 +344,11 @@ class _ChartsTab extends ConsumerWidget {
               ),
             );
           },
-          loading: () => const SliverToBoxAdapter(
-            child: Column(
-              children: [
-                SectionHeader(title: 'Top 50 tracks'),
-                _LoadingRows(),
+          loading: () => SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  SectionHeader(title: AppLocalizations.of(context)!.discoverTop50Tracks),
+                  _LoadingRows(),
               ],
             ),
           ),
@@ -359,7 +360,7 @@ class _ChartsTab extends ConsumerWidget {
             return SliverToBoxAdapter(
               child: Column(
                 children: [
-                  const SectionHeader(title: 'Top albums'),
+                  SectionHeader(title: AppLocalizations.of(context)!.discoverTopAlbums),
                   SnapHorizontalList(
                     itemCount: list.length,
                     itemExtent: 150,
@@ -370,11 +371,11 @@ class _ChartsTab extends ConsumerWidget {
               ),
             );
           },
-          loading: () => const SliverToBoxAdapter(
+          loading: () => SliverToBoxAdapter(
             child: Column(
-              children: [
-                SectionHeader(title: 'Top albums'),
-                SizedBox(height: 198),
+                children: [
+                  SectionHeader(title: AppLocalizations.of(context)!.discoverTopAlbums),
+                  SizedBox(height: 198),
               ],
             ),
           ),
@@ -386,7 +387,7 @@ class _ChartsTab extends ConsumerWidget {
             return SliverToBoxAdapter(
               child: Column(
                 children: [
-                  const SectionHeader(title: 'Top playlists'),
+                  SectionHeader(title: AppLocalizations.of(context)!.discoverTopPlaylists),
                   SnapHorizontalList(
                     itemCount: list.length,
                     itemExtent: 150,
@@ -397,11 +398,11 @@ class _ChartsTab extends ConsumerWidget {
               ),
             );
           },
-          loading: () => const SliverToBoxAdapter(
+          loading: () => SliverToBoxAdapter(
             child: Column(
-              children: [
-                SectionHeader(title: 'Top playlists'),
-                SizedBox(height: 198),
+                children: [
+                  SectionHeader(title: AppLocalizations.of(context)!.discoverTopPlaylists),
+                  SizedBox(height: 198),
               ],
             ),
           ),

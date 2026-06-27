@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/audio/sleep_timer.dart';
 import '../../core/theme/app_theme.dart';
+import '../../generated/app_localizations.dart';
 
 /// Custom radial sleep-timer picker. Drag around the dial to set minutes.
 /// Snaps to common stops (5, 10, 15, 20, 30, 45, 60).
@@ -67,7 +68,7 @@ class _SleepTimerDialState extends ConsumerState<SleepTimerDial> {
             ),
           ),
           Text(
-            'SLEEP TIMER',
+            AppLocalizations.of(context)!.sleepTimerTitle,
             style: TextStyle(
               color: theme.onSurfaceMuted,
               fontSize: 11,
@@ -111,7 +112,7 @@ class _SleepTimerDialState extends ConsumerState<SleepTimerDial> {
                                 ),
                               ),
                               Text(
-                                'minutes',
+                                AppLocalizations.of(context)!.sleepTimerMinutes,
                                 style: TextStyle(
                                   color: theme.onSurfaceMuted,
                                   fontSize: 12,
@@ -149,7 +150,7 @@ class _SleepTimerDialState extends ConsumerState<SleepTimerDial> {
                         border: Border.all(color: theme.error),
                       ),
                       child: Text(
-                        'CANCEL TIMER',
+                        AppLocalizations.of(context)!.sleepTimerCancel,
                         style: TextStyle(
                           color: theme.error,
                           fontSize: 12,
@@ -178,7 +179,7 @@ class _SleepTimerDialState extends ConsumerState<SleepTimerDial> {
                       borderRadius: BorderRadius.circular(999),
                     ),
                     child: Text(
-                      'START',
+                      AppLocalizations.of(context)!.sleepTimerStart,
                       style: TextStyle(
                         color: theme.background,
                         fontSize: 12,

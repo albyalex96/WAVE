@@ -16,6 +16,7 @@ import '../../widgets/search_bar.dart';
 import '../../widgets/section_header.dart';
 import '../../widgets/shimmer.dart';
 import '../../widgets/snap_horizontal_list.dart';
+import '../../generated/app_localizations.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});
@@ -95,6 +96,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 onChanged: (v) =>
                     ref.read(searchQueryProvider.notifier).setText(v),
                 onSubmitted: _commit,
+                hint: AppLocalizations.of(context)!.searchHint,
               ),
             ),
           ],
@@ -119,8 +121,8 @@ class _Browse extends ConsumerWidget {
       physics: const BouncingScrollPhysics(),
       slivers: <Widget>[
         if (recents.isNotEmpty) ...<Widget>[
-          const SliverToBoxAdapter(
-            child: SectionHeader(title: 'Recent'),
+          SliverToBoxAdapter(
+            child: SectionHeader(title: AppLocalizations.of(context)!.searchRecent),
           ),
           SliverToBoxAdapter(
             child: Padding(
@@ -172,7 +174,7 @@ class _Results extends ConsumerWidget {
         ],
       ),
       error: (e, _) => InlineError(
-        message: 'Search failed. Tap retry.',
+        message: AppLocalizations.of(context)!.searchFailed,
         onRetry: () => ref.invalidate(searchResultsProvider),
       ),
       data: (r) {
@@ -181,7 +183,7 @@ class _Results extends ConsumerWidget {
           physics: const BouncingScrollPhysics(),
           slivers: <Widget>[
             if (r.tracks.isNotEmpty) ...<Widget>[
-              const SliverToBoxAdapter(child: SectionHeader(title: 'Tracks')),
+              SliverToBoxAdapter(child: SectionHeader(title: AppLocalizations.of(context)!.searchTracks)),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, i) {
@@ -242,8 +244,8 @@ class _Results extends ConsumerWidget {
               ),
             ],
             if (r.artists.isNotEmpty) ...<Widget>[
-              const SliverToBoxAdapter(
-                child: SectionHeader(title: 'Artists'),
+              SliverToBoxAdapter(
+                child: SectionHeader(title: AppLocalizations.of(context)!.searchArtists),
               ),
               SliverToBoxAdapter(
                 child: SnapHorizontalList(
@@ -255,8 +257,8 @@ class _Results extends ConsumerWidget {
               ),
             ],
             if (r.albums.isNotEmpty) ...<Widget>[
-              const SliverToBoxAdapter(
-                child: SectionHeader(title: 'Albums'),
+              SliverToBoxAdapter(
+                child: SectionHeader(title: AppLocalizations.of(context)!.searchAlbums),
               ),
               SliverToBoxAdapter(
                 child: SnapHorizontalList(
@@ -268,8 +270,8 @@ class _Results extends ConsumerWidget {
               ),
             ],
             if (r.playlists.isNotEmpty) ...<Widget>[
-              const SliverToBoxAdapter(
-                child: SectionHeader(title: 'Playlists'),
+              SliverToBoxAdapter(
+                child: SectionHeader(title: AppLocalizations.of(context)!.searchPlaylists),
               ),
               SliverToBoxAdapter(
                 child: SnapHorizontalList(
@@ -320,7 +322,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 18),
           Text(
-            'No matches',
+            AppLocalizations.of(context)!.searchNoMatches,
             style: TextStyle(
               color: t.onSurface,
               fontSize: 18,
@@ -329,7 +331,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            'Try a different artist, album or song.',
+            AppLocalizations.of(context)!.searchNoMatchesSubtitle,
             style: TextStyle(color: t.onSurfaceMuted, fontSize: 13),
           ),
         ],

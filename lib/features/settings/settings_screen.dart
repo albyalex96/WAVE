@@ -12,6 +12,7 @@ import '../../widgets/snap_horizontal_list.dart';
 import '../../widgets/theme_morph.dart';
 import '../../services/app_updater_service.dart';
 import '../../widgets/update_dialog.dart';
+import '../../generated/app_localizations.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -25,24 +26,24 @@ class SettingsScreen extends ConsumerWidget {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 18, 20, 80),
           physics: const BouncingScrollPhysics(),
-          children: const <Widget>[
+          children: <Widget>[
             _Header(),
             SizedBox(height: 24),
             _AccountSection(),
             SizedBox(height: 28),
-            _SectionTitle('Themes'),
+            _SectionTitle(AppLocalizations.of(context)!.settingsThemes),
             SizedBox(height: 12),
             _ThemeCarousel(),
             SizedBox(height: 28),
-            _SectionTitle('Crossfade'),
+            _SectionTitle(AppLocalizations.of(context)!.settingsCrossfade),
             SizedBox(height: 12),
             _CrossfadeRow(),
             SizedBox(height: 28),
-            _SectionTitle('Equalizer'),
+            _SectionTitle(AppLocalizations.of(context)!.settingsEqualizer),
             SizedBox(height: 12),
             _EqualizerCard(),
             SizedBox(height: 28),
-            _SectionTitle('About'),
+            _SectionTitle(AppLocalizations.of(context)!.settingsAbout),
             SizedBox(height: 12),
             _AboutBlock(),
           ],
@@ -66,7 +67,7 @@ class _Header extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                'SETTINGS',
+                AppLocalizations.of(context)!.settingsTitle,
                 style: TextStyle(
                   color: theme.onSurfaceMuted,
                   fontSize: 11,
@@ -76,7 +77,7 @@ class _Header extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                'Customize WAVE',
+                AppLocalizations.of(context)!.settingsSubtitle,
                 style: TextStyle(
                   color: theme.onSurface,
                   fontSize: 28,
@@ -194,7 +195,7 @@ class _AccountSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'You',
+                  AppLocalizations.of(context)!.settingsYou,
                   style: TextStyle(
                     color: theme.onSurface,
                     fontSize: 16,
@@ -203,7 +204,7 @@ class _AccountSection extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'local@wave.app',
+                  AppLocalizations.of(context)!.settingsEmail,
                   style: TextStyle(
                     color: theme.onSurfaceMuted,
                     fontSize: 12,
@@ -393,7 +394,7 @@ class _CrossfadeRow extends ConsumerWidget {
             children: <Widget>[
               Expanded(
                 child: Text(
-                  'Crossfade between tracks',
+                  AppLocalizations.of(context)!.settingsCrossfadeLabel,
                   style: TextStyle(
                     color: theme.onSurface,
                     fontSize: 14,
@@ -402,7 +403,7 @@ class _CrossfadeRow extends ConsumerWidget {
                 ),
               ),
               Text(
-                value == 0 ? 'OFF' : '${value.toInt()}s',
+                value == 0 ? AppLocalizations.of(context)!.settingsCrossfadeOff : AppLocalizations.of(context)!.settingsCrossfadeValue(value.toInt().toString()),
                 style: TextStyle(
                   color: value == 0 ? theme.onSurfaceMuted : theme.accent,
                   fontSize: 14,
@@ -545,7 +546,7 @@ class _EqualizerCard extends ConsumerWidget {
                       .setEqualizer(const <double>[0, 0, 0, 0, 0]);
                 },
                 child: Text(
-                  'RESET TO DEFAULT',
+                  AppLocalizations.of(context)!.settingsEqReset,
                   style: TextStyle(
                     color: theme.accent,
                     fontSize: 11,
@@ -709,7 +710,7 @@ class _AboutBlockState extends State<_AboutBlock> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('WAVE is up to date!'),
+            content: Text(AppLocalizations.of(context)!.settingsUpToDate),
             backgroundColor: AppThemeScope.of(context).accent,
             behavior: SnackBarBehavior.floating,
           ),
@@ -767,7 +768,7 @@ class _AboutBlockState extends State<_AboutBlock> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'v1.0.3  ·  Build 3',
+                      AppLocalizations.of(context)!.settingsVersion,
                       style: TextStyle(
                         color: theme.onSurfaceMuted,
                         fontSize: 12,
@@ -801,8 +802,8 @@ class _AboutBlockState extends State<_AboutBlock> {
                         color: theme.accent,
                       ),
                     )
-                  : const Text(
-                      'Check for Updates',
+                  : Text(
+                      AppLocalizations.of(context)!.settingsCheckUpdates,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 14,

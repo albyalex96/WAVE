@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_theme.dart';
+import '../../../generated/app_localizations.dart';
 import '../nav_destination.dart';
 
 /// Glassmorphic floating pill nav for the Vapor theme.
@@ -106,7 +107,7 @@ class _VaporTab extends StatelessWidget {
             ),
             const SizedBox(height: 2),
             Text(
-              destination.label,
+              destination.label(context),
               style: TextStyle(
                 fontSize: 9,
                 fontWeight: active ? FontWeight.w600 : FontWeight.w400,

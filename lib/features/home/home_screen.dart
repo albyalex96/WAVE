@@ -23,6 +23,7 @@ import '../../widgets/snap_horizontal_list.dart';
 import '../../widgets/update_dialog.dart';
 import '../../core/api/lastfm_providers.dart';
 import '../../core/api/models/deezer_track.dart';
+import '../../generated/app_localizations.dart';
 /// Home tab — 9 sections per spec:
 ///  1. Greeting + settings entry
 ///  2. Quick resume strip (recently played)
@@ -95,12 +96,12 @@ class _Greeting extends StatelessWidget {
     final theme = AppThemeScope.of(context);
     final hour = DateTime.now().hour;
     final greeting = hour < 5
-        ? 'Late night listen'
+        ? AppLocalizations.of(context)!.homeLateNight
         : hour < 12
-            ? 'Good morning'
+            ? AppLocalizations.of(context)!.homeGoodMorning
             : hour < 18
-                ? 'Good afternoon'
-                : 'Good evening';
+                ? AppLocalizations.of(context)!.homeGoodAfternoon
+                : AppLocalizations.of(context)!.homeGoodEvening;
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
       child: Row(
@@ -253,7 +254,7 @@ class _TrendingSection extends ConsumerWidget {
         if (top.isEmpty) return const SizedBox.shrink();
         return Column(
           children: <Widget>[
-            const SectionHeader(title: 'Trending now'),
+            SectionHeader(title: AppLocalizations.of(context)!.homeTrendingNow),
             for (var i = 0; i < top.length; i++)
               TrackRow(
                 track: top[i],
@@ -265,8 +266,8 @@ class _TrendingSection extends ConsumerWidget {
         );
       },
       loading: () => Column(
-        children: const <Widget>[
-          SectionHeader(title: 'Trending now'),
+        children: <Widget>[
+          SectionHeader(title: AppLocalizations.of(context)!.homeTrendingNow),
           _RowShimmer(),
         ],
       ),
@@ -289,7 +290,7 @@ class _MadeForYouSection extends ConsumerWidget {
         if (top.isEmpty) return const SizedBox.shrink();
         return Column(
           children: <Widget>[
-            const SectionHeader(title: 'Made for you'),
+            SectionHeader(title: AppLocalizations.of(context)!.homeMadeForYou),
             _CoverRow<DeezerAlbum>(
               items: top,
               builder: (a) => AlbumCard(album: a),
@@ -298,8 +299,8 @@ class _MadeForYouSection extends ConsumerWidget {
         );
       },
       loading: () => Column(
-        children: const <Widget>[
-          SectionHeader(title: 'Made for you'),
+        children: <Widget>[
+          SectionHeader(title: AppLocalizations.of(context)!.homeMadeForYou),
           _CoverRowShimmer(),
         ],
       ),
@@ -322,7 +323,7 @@ class _NewReleasesSection extends ConsumerWidget {
         if (top.isEmpty) return const SizedBox.shrink();
         return Column(
           children: <Widget>[
-            const SectionHeader(title: 'New releases'),
+            SectionHeader(title: AppLocalizations.of(context)!.homeNewReleases),
             _CoverRow<DeezerAlbum>(
               items: top,
               builder: (a) => AlbumCard(album: a),
@@ -331,8 +332,8 @@ class _NewReleasesSection extends ConsumerWidget {
         );
       },
       loading: () => Column(
-        children: const <Widget>[
-          SectionHeader(title: 'New releases'),
+        children: <Widget>[
+          SectionHeader(title: AppLocalizations.of(context)!.homeNewReleases),
           _CoverRowShimmer(),
         ],
       ),
@@ -355,7 +356,7 @@ class _TopArtistsSection extends ConsumerWidget {
         if (top.isEmpty) return const SizedBox.shrink();
         return Column(
           children: <Widget>[
-            const SectionHeader(title: 'Top artists'),
+            SectionHeader(title: AppLocalizations.of(context)!.homeTopArtists),
             _CoverRow<DeezerArtist>(
               items: top,
               itemSize: 110,
@@ -365,8 +366,8 @@ class _TopArtistsSection extends ConsumerWidget {
         );
       },
       loading: () => Column(
-        children: const <Widget>[
-          SectionHeader(title: 'Top artists'),
+        children: <Widget>[
+          SectionHeader(title: AppLocalizations.of(context)!.homeTopArtists),
           _CoverRowShimmer(circle: true),
         ],
       ),
@@ -391,7 +392,7 @@ class _MixesSection extends ConsumerWidget {
         if (mixes.isEmpty) return const SizedBox.shrink();
         return Column(
           children: <Widget>[
-            const SectionHeader(title: 'Mixes'),
+            SectionHeader(title: AppLocalizations.of(context)!.homeMixes),
             _CoverRow<DeezerPlaylist>(
               items: mixes,
               builder: (p) => PlaylistCard(playlist: p),
@@ -400,8 +401,8 @@ class _MixesSection extends ConsumerWidget {
         );
       },
       loading: () => Column(
-        children: const <Widget>[
-          SectionHeader(title: 'Mixes'),
+        children: <Widget>[
+          SectionHeader(title: AppLocalizations.of(context)!.homeMixes),
           _CoverRowShimmer(),
         ],
       ),
@@ -424,7 +425,7 @@ class _EditorialPicksSection extends ConsumerWidget {
         if (top.isEmpty) return const SizedBox.shrink();
         return Column(
           children: <Widget>[
-            const SectionHeader(title: 'Editorial picks'),
+            SectionHeader(title: AppLocalizations.of(context)!.homeEditorialPicks),
             _CoverRow<DeezerAlbum>(
               items: top,
               builder: (a) => AlbumCard(album: a),
@@ -433,8 +434,8 @@ class _EditorialPicksSection extends ConsumerWidget {
         );
       },
       loading: () => Column(
-        children: const <Widget>[
-          SectionHeader(title: 'Editorial picks'),
+        children: <Widget>[
+          SectionHeader(title: AppLocalizations.of(context)!.homeEditorialPicks),
           _CoverRowShimmer(),
         ],
       ),
@@ -455,7 +456,7 @@ class _RecentlyPlayedSection extends ConsumerWidget {
     final theme = AppThemeScope.of(context);
     return Column(
       children: <Widget>[
-        const SectionHeader(title: 'Recently played'),
+        SectionHeader(title: AppLocalizations.of(context)!.homeRecentlyPlayed),
         SnapHorizontalList(
           itemCount: entries.length,
           itemExtent: 120,
@@ -536,7 +537,7 @@ class _RecommendedTracksSection extends ConsumerWidget {
         if (top.isEmpty) return const SizedBox.shrink();
         return Column(
           children: <Widget>[
-            const SectionHeader(title: 'Recommended tracks'),
+            SectionHeader(title: AppLocalizations.of(context)!.homeRecommendedTracks),
             _CoverRow<DeezerTrack>(
               items: top,
               builder: (t) => TrackCard(track: t, queue: top),
@@ -545,8 +546,8 @@ class _RecommendedTracksSection extends ConsumerWidget {
         );
       },
       loading: () => Column(
-        children: const <Widget>[
-          SectionHeader(title: 'Recommended tracks'),
+        children: <Widget>[
+          SectionHeader(title: AppLocalizations.of(context)!.homeRecommendedTracks),
           _CoverRowShimmer(),
         ],
       ),
@@ -594,7 +595,7 @@ Future<void> _showRemoveMenu(
     items: [
       ContextMenuItem(
         icon: PhosphorIconsRegular.trash,
-        label: 'Remove from recently played',
+        label: AppLocalizations.of(context)!.homeRemoveFromRecent,
         destructive: true,
         onTap: () => ref.read(recentlyPlayedProvider.notifier).remove(e),
       ),

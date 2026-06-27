@@ -8,6 +8,7 @@ import '../../core/api/models/deezer_genre.dart';
 import '../../core/api/models/deezer_track.dart';
 import '../../core/audio/player_providers.dart';
 import '../../core/theme/app_theme.dart';
+import '../../generated/app_localizations.dart';
 import '../../widgets/detail_track_row.dart';
 import '../../widgets/inline_error.dart';
 import '../../widgets/shimmer.dart';
@@ -70,7 +71,7 @@ class GenreScreen extends ConsumerWidget {
               ),
               error: (e, _) => SliverToBoxAdapter(
                 child: InlineError(
-                  message: 'Could not load genre tracks',
+                  message: AppLocalizations.of(context)!.genreLoadError,
                   onRetry: () =>
                       ref.invalidate(genreRadioTracksProvider(genre.id)),
                 ),
@@ -166,7 +167,7 @@ class _PlayButton extends StatelessWidget {
             Icon(PhosphorIconsFill.play, color: theme.background, size: 20),
             const SizedBox(width: 10),
             Text(
-              'PLAY RADIO',
+              AppLocalizations.of(context)!.discoverPlayRadio,
               style: TextStyle(
                 color: theme.background,
                 fontSize: 14,

@@ -6,6 +6,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import '../../core/api/models/deezer_track.dart';
 import '../../core/storage/library_providers.dart';
 import '../../core/theme/app_theme.dart';
+import '../../generated/app_localizations.dart';
 
 void showAddToPlaylistSheet(BuildContext context, DeezerTrack track) {
   showModalBottomSheet<void>(
@@ -75,7 +76,7 @@ class _AddToPlaylistSheetState extends ConsumerState<_AddToPlaylistSheet> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Add to Playlist',
+                AppLocalizations.of(context)!.addToPlaylistTitle,
                 style: TextStyle(
                   color: theme.onSurface,
                   fontSize: 18,
@@ -94,7 +95,7 @@ class _AddToPlaylistSheetState extends ConsumerState<_AddToPlaylistSheet> {
                           autofocus: true,
                           style: TextStyle(color: theme.onSurface),
                           decoration: InputDecoration(
-                            hintText: 'Playlist name',
+                            hintText: AppLocalizations.of(context)!.addToPlaylistHint,
                             hintStyle: TextStyle(color: theme.onSurfaceMuted),
                             filled: true,
                             fillColor: theme.background,
@@ -126,7 +127,7 @@ class _AddToPlaylistSheetState extends ConsumerState<_AddToPlaylistSheet> {
                     child: Icon(PhosphorIconsRegular.plus, color: theme.accent),
                   ),
                   title: Text(
-                    'New Playlist',
+                    AppLocalizations.of(context)!.addToPlaylistNew,
                     style: TextStyle(color: theme.onSurface, fontWeight: FontWeight.w600),
                   ),
                   onTap: () => setState(() => _creating = true),
@@ -160,7 +161,7 @@ class _AddToPlaylistSheetState extends ConsumerState<_AddToPlaylistSheet> {
                         style: TextStyle(color: theme.onSurface, fontWeight: FontWeight.w600),
                       ),
                       subtitle: Text(
-                        '${pl.nbTracks ?? 0} tracks',
+                        AppLocalizations.of(context)!.addToPlaylistTrackCount(pl.nbTracks ?? 0),
                         style: TextStyle(color: theme.onSurfaceMuted, fontSize: 13),
                       ),
                       onTap: () async {

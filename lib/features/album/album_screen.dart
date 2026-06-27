@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
+import '../../generated/app_localizations.dart';
 import '../../core/api/deezer_providers.dart';
 import '../../core/api/models/deezer_album.dart';
 import '../../core/api/models/deezer_track.dart';
@@ -35,7 +36,7 @@ class AlbumScreen extends ConsumerWidget {
           loading: () => const _Loading(),
           error: (e, _) => Center(
             child: InlineError(
-              message: 'Could not load album',
+              message: AppLocalizations.of(context)!.albumLoadError,
               onRetry: () => ref.invalidate(albumProvider(albumId)),
             ),
           ),
@@ -137,7 +138,7 @@ class _AlbumBody extends ConsumerWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  _meta(album),
+                  _meta(album, AppLocalizations.of(context)!),
                   style: TextStyle(
                     color: theme.onSurfaceMuted,
                     fontSize: 12,
@@ -226,7 +227,7 @@ class _AlbumBody extends ConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: InlineError(
-                  message: 'Could not load tracks',
+                  message: AppLocalizations.of(context)!.albumTracksLoadError,
                   onRetry: onRetryTracks,
                 ),
               ),
@@ -262,7 +263,7 @@ class _AlbumBody extends ConsumerWidget {
     );
   }
 
-  String _meta(DeezerAlbum a) {
+  String _meta(DeezerAlbum a, AppLocalizations l10n) {
     final year = (a.releaseDate ?? '').length >= 4
         ? a.releaseDate!.substring(0, 4)
         : '';
@@ -270,8 +271,7 @@ class _AlbumBody extends ConsumerWidget {
     final mins = (a.duration ?? 0) ~/ 60;
     return <String>[
       if (year.isNotEmpty) year,
-      if (tracks > 0) '$tracks tracks',
-      if (mins > 0) '${mins}m',
+      if (tracks > 0 || mins > 0) l10n.albumMetadata(tracks.toString(), mins.toString()),
     ].join('  ·  ');
   }
 }
@@ -299,7 +299,7 @@ class _Header extends StatelessWidget {
           ),
           const Spacer(),
           Text(
-            'ALBUM',
+            AppLocalizations.of(context)!.albumLabel,
             style: TextStyle(
               color: theme.onSurfaceMuted,
               fontSize: 11,
@@ -327,7 +327,7 @@ class _MoreFromArtist extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const SectionHeader(title: 'More from this artist'),
+          SectionHeader(title: AppLocalizations.of(context)!.albumMoreFromArtist),
           SizedBox(
             height: 200,
             child: albumsAsync.when(

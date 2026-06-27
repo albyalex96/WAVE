@@ -51,8 +51,10 @@ class PlaylistExchange {
   ) async {
     final map = jsonDecode(jsonStr);
     if (map is! Map || map['type'] != 'wave_playlist') {
+      // TODO: Make this string localizable — no BuildContext available here.
       throw const FormatException('Invalid WAVE playlist file.');
     }
+    // TODO: Make this string localizable — no BuildContext available here.
     final title = map['title'] as String? ?? 'Imported Playlist';
     final description = map['description'] as String?;
     final rawTracks = map['tracks'] as List?;

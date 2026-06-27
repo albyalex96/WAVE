@@ -6,6 +6,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import '../../core/audio/player_providers.dart';
 import '../../core/router/app_router.dart';
 import '../../core/theme/app_theme.dart';
+import '../../generated/app_localizations.dart';
 import 'nav_destination.dart';
 
 /// Permanent left sidebar shown on desktop layouts. 240px wide.
@@ -34,7 +35,7 @@ class DesktopSidebar extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 28, 20, 24),
             child: Text(
-              'WAVE',
+              AppLocalizations.of(context)!.appTitle,
               style: TextStyle(
                 color: theme.accent,
                 fontSize: 22,
@@ -65,7 +66,7 @@ class DesktopSidebar extends ConsumerWidget {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    'Settings',
+                    AppLocalizations.of(context)!.settingsAbout,
                     style: TextStyle(
                       color: theme.onSurfaceMuted,
                       fontSize: 13,
@@ -172,7 +173,7 @@ class _SidebarItem extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             Text(
-              destination.label,
+              destination.label(context),
               style: TextStyle(
                 color: active ? theme.onSurface : theme.onSurfaceMuted,
                 fontSize: 14,

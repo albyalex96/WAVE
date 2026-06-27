@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_theme.dart';
+import '../../../generated/app_localizations.dart';
 import '../nav_destination.dart';
 
 /// Brutalist theme: thick black bar, uppercase text, no animation on switch.
@@ -32,7 +33,7 @@ class BrutalistBottomNav extends StatelessWidget {
             Expanded(
               child: _BrutalistTab(
                 theme: theme,
-                label: destinations[i].label,
+                label: destinations[i].label(context),
                 active: i == activeIndex,
                 onTap: () => onSelected(i),
               ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../generated/app_localizations.dart';
+
 import '../../core/api/models/deezer_genre.dart';
 import '../../features/album/album_screen.dart';
 import '../../features/artist/artist_screen.dart';
@@ -165,7 +167,7 @@ final GoRouter appRouter = GoRouter(
             if (genre == null) {
               return _fadePage(
                 key: state.pageKey,
-                child: const Scaffold(body: Center(child: Text('Invalid genre'))),
+                child: Scaffold(body: Center(child: Text(AppLocalizations.of(context)!.genreInvalid))),
               );
             }
             return _fadePage(

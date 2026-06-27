@@ -9,6 +9,7 @@ import '../../core/router/app_router.dart';
 import '../../core/theme/app_theme.dart';
 import 'add_to_playlist_sheet.dart';
 import 'sleep_timer_dial.dart';
+import '../../generated/app_localizations.dart';
 
 /// Generic slide-up sheet using `showGeneralDialog`. Drag handle, themed.
 Future<T?> showWaveSheet<T>({
@@ -112,7 +113,7 @@ class MoreOptionsSheet extends ConsumerWidget {
             const SizedBox(height: 14),
             _Row(
               icon: PhosphorIconsRegular.queue,
-              label: 'Play next',
+              label: AppLocalizations.of(context)!.playerPlayNext,
               onTap: () {
                 controls.addToQueueNext(track);
                 Navigator.of(context).pop();
@@ -120,7 +121,7 @@ class MoreOptionsSheet extends ConsumerWidget {
             ),
             _Row(
               icon: PhosphorIconsRegular.playlist,
-              label: 'Add to queue',
+              label: AppLocalizations.of(context)!.playerAddToQueue,
               onTap: () {
                 controls.addToQueueLast(track);
                 Navigator.of(context).pop();
@@ -128,7 +129,7 @@ class MoreOptionsSheet extends ConsumerWidget {
             ),
             _Row(
               icon: PhosphorIconsRegular.plus,
-              label: 'Add to playlist',
+              label: AppLocalizations.of(context)!.playerAddToPlaylist,
               onTap: () {
                 Navigator.of(context).pop();
                 showAddToPlaylistSheet(context, track);
@@ -136,7 +137,7 @@ class MoreOptionsSheet extends ConsumerWidget {
             ),
              _Row(
               icon: PhosphorIconsRegular.vinylRecord,
-              label: 'Go to album',
+              label: AppLocalizations.of(context)!.playerGoToAlbum,
               onTap: () {
                 final id = track.album?.id;
                 if (id != null) {
@@ -151,7 +152,7 @@ class MoreOptionsSheet extends ConsumerWidget {
             ),
             _Row(
               icon: PhosphorIconsRegular.user,
-              label: 'Go to artist',
+              label: AppLocalizations.of(context)!.playerGoToArtist,
               onTap: () {
                 final id = track.artist?.id;
                 if (id != null) {
@@ -167,7 +168,7 @@ class MoreOptionsSheet extends ConsumerWidget {
 
             _Row(
               icon: PhosphorIconsRegular.clockCounterClockwise,
-              label: 'Sleep timer',
+              label: AppLocalizations.of(context)!.playerSleepTimer,
               onTap: () {
                 Navigator.of(context).pop();
                 showWaveSheet<void>(

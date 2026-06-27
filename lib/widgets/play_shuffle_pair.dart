@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../core/theme/app_theme.dart';
+import '../generated/app_localizations.dart';
 
 /// "Play" + "Shuffle" button pair shown at the top of detail pages.
 class PlayShufflePair extends StatelessWidget {
@@ -40,7 +41,7 @@ class PlayShufflePair extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'PLAY',
+                    AppLocalizations.of(context)!.playerPlay,
                     style: TextStyle(
                       color: theme.background,
                       fontSize: 12,

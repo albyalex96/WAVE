@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_theme.dart';
+import '../../../generated/app_localizations.dart';
 import '../nav_destination.dart';
 
 /// Minimal Mono theme: text-only labels, the only visual change between
@@ -47,7 +48,7 @@ class MinimalBottomNav extends StatelessWidget {
                           : FontWeight.w300,
                       letterSpacing: 0.2,
                     ),
-                    child: Text(destinations[i].label),
+                    child: Text(destinations[i].label(context)),
                   ),
                 ),
               ),

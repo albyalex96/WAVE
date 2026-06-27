@@ -16,6 +16,7 @@ import '../../core/theme/app_theme.dart';
 import '../../core/downloads/download_providers.dart';
 import '../../core/utils/app_breakpoints.dart';
 import '../../main.dart' show scaffoldMessengerKey;
+import '../../generated/app_localizations.dart';
 import '../../widgets/content_cards.dart';
 import '../../widgets/context_menu.dart';
 import '../../widgets/player/add_to_playlist_sheet.dart';
@@ -33,12 +34,12 @@ class LibraryScreen extends ConsumerStatefulWidget {
 class _LibraryScreenState extends ConsumerState<LibraryScreen> {
   int _tab = 0;
 
-  static const List<String> _labels = <String>[
-    'Liked',
-    'Albums',
-    'Playlists',
-    'Following',
-    'Downloads',
+  List<String> _labels(AppLocalizations l10n) => <String>[
+    l10n.libraryLiked,
+    l10n.libraryAlbums,
+    l10n.libraryPlaylists,
+    l10n.libraryFollowing,
+    l10n.libraryDownloads,
   ];
 
   @override
@@ -50,8 +51,8 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
-            child: Text(
-              'Your library',
+              child: Text(
+                AppLocalizations.of(context)!.libraryYourLibrary,
               style: TextStyle(
                 color: theme.onSurface,
                 fontSize: 28,
@@ -61,7 +62,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
             ),
           ),
           WaveSubTabs(
-            labels: _labels,
+            labels: _labels(AppLocalizations.of(context)!),
             active: _tab,
             onTap: (i) => setState(() => _tab = i),
           ),
@@ -122,10 +123,11 @@ class _LikedTracksTab extends ConsumerWidget {
     final theme = AppThemeScope.of(context);
 
     if (tracks.isEmpty) {
+      final l10n = AppLocalizations.of(context)!;
       return _EmptyHint(
         icon: PhosphorIconsRegular.heart,
-        title: 'Nothing liked yet',
-        subtitle: 'Tap the heart on any song to save it here.',
+        title: l10n.libraryNothingLiked,
+        subtitle: l10n.libraryNothingLikedSubtitle,
       );
     }
 
@@ -144,7 +146,7 @@ class _LikedTracksTab extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        '${tracks.length} songs · ${_durationText(totalSecs)}',
+                        '${AppLocalizations.of(context)!.librarySongsCount(tracks.length)} · ${_durationText(totalSecs)}',
                         style: TextStyle(
                           color: theme.onSurfaceMuted,
                           fontSize: 12,
@@ -155,7 +157,7 @@ class _LikedTracksTab extends ConsumerWidget {
                   ),
                 ),
                 _PillButton(
-                  label: 'Shuffle',
+                  label: AppLocalizations.of(context)!.libraryShuffle,
                   icon: PhosphorIconsRegular.shuffle,
                   onTap: () async {
                     final controls = ref.read(playerControlsProvider);
@@ -165,7 +167,7 @@ class _LikedTracksTab extends ConsumerWidget {
                 ),
                 const SizedBox(width: 8),
                 _PillButton(
-                  label: 'Play',
+                  label: AppLocalizations.of(context)!.libraryPlay,
                   icon: PhosphorIconsFill.play,
                   filled: true,
                   onTap: () async {
@@ -192,7 +194,7 @@ class _LikedTracksTab extends ConsumerWidget {
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    _sortLabel(sort),
+                    _sortLabel(sort, AppLocalizations.of(context)!),
                     style: TextStyle(
                       color: theme.onSurfaceMuted,
                       fontSize: 12,
@@ -212,12 +214,12 @@ class _LikedTracksTab extends ConsumerWidget {
               return SwipeActionRow(
                 trailingIcon: PhosphorIconsRegular.heartBreak,
                 trailingColor: theme.error,
-                trailingLabel: 'Unlike',
+                trailingLabel: AppLocalizations.of(context)!.libraryUnlike,
                 onTrailing: () =>
                     ref.read(likedTracksProvider.notifier).remove(t.id),
                 leadingIcon: PhosphorIconsRegular.queue,
                 leadingColor: theme.accent,
-                leadingLabel: 'Queue',
+                leadingLabel: AppLocalizations.of(context)!.libraryQueue,
                 onLeading: () async {
                   await ref.read(playerControlsProvider).addToQueueLast(t);
                 },
@@ -257,12 +259,12 @@ class _LikedTracksTab extends ConsumerWidget {
       items: <ContextMenuItem>[
         ContextMenuItem(
           icon: PhosphorIconsRegular.queue,
-          label: 'Add to queue',
+          label: AppLocalizations.of(context)!.libraryAddToQueue,
           onTap: () => ref.read(playerControlsProvider).addToQueueLast(t),
         ),
         ContextMenuItem(
           icon: PhosphorIconsRegular.playlist,
-          label: 'Add to playlist',
+          label: AppLocalizations.of(context)!.libraryAddToPlaylist,
           onTap: () {
             showAddToPlaylistSheet(context, t);
           },
@@ -270,23 +272,23 @@ class _LikedTracksTab extends ConsumerWidget {
         if (t.album != null)
           ContextMenuItem(
             icon: PhosphorIconsRegular.vinylRecord,
-            label: 'Go to album',
+            label: AppLocalizations.of(context)!.libraryGoToAlbum,
             onTap: () => context.push(AppRoutes.albumPath(t.album!.id)),
           ),
         if (t.artist != null)
           ContextMenuItem(
             icon: PhosphorIconsRegular.user,
-            label: 'Go to artist',
+            label: AppLocalizations.of(context)!.libraryGoToArtist,
             onTap: () => context.push(AppRoutes.artistPath(t.artist!.id)),
           ),
         ContextMenuItem(
           icon: PhosphorIconsRegular.shareNetwork,
-          label: 'Share',
+          label: AppLocalizations.of(context)!.libraryShare,
           onTap: () {},
         ),
         ContextMenuItem(
           icon: PhosphorIconsRegular.heartBreak,
-          label: 'Remove from liked',
+          label: AppLocalizations.of(context)!.libraryRemoveFromLiked,
           destructive: true,
           onTap: () => ref.read(likedTracksProvider.notifier).remove(t.id),
         ),
@@ -336,7 +338,7 @@ class _LikedTracksTab extends ConsumerWidget {
                     ),
                   ),
                   Text(
-                    'Sort by',
+                    AppLocalizations.of(context)!.librarySortBy,
                     style: TextStyle(
                       color: theme.onSurface,
                       fontSize: 14,
@@ -366,7 +368,7 @@ class _LikedTracksTab extends ConsumerWidget {
                             ),
                             const SizedBox(width: 12),
                             Text(
-                              _sortLabel(s),
+                              _sortLabel(s, AppLocalizations.of(context)!),
                               style: TextStyle(
                                 color: theme.onSurface,
                                 fontSize: 14,
@@ -398,16 +400,16 @@ class _LikedTracksTab extends ConsumerWidget {
   }
 }
 
-String _sortLabel(LikedSort s) {
+String _sortLabel(LikedSort s, AppLocalizations l10n) {
   switch (s) {
     case LikedSort.recent:
-      return 'Recently liked';
+      return l10n.libraryRecentlyLiked;
     case LikedSort.alphabetical:
-      return 'Title (A–Z)';
+      return l10n.libraryTitleAZ;
     case LikedSort.artist:
-      return 'Artist';
+      return l10n.libraryArtist;
     case LikedSort.duration:
-      return 'Duration';
+      return l10n.libraryDuration;
   }
 }
 
@@ -428,10 +430,11 @@ class _LikedAlbumsTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final albums = ref.watch(likedAlbumsProvider);
     if (albums.isEmpty) {
+      final l10n = AppLocalizations.of(context)!;
       return _EmptyHint(
         icon: PhosphorIconsRegular.vinylRecord,
-        title: 'No saved albums',
-        subtitle: 'Albums you save will appear here.',
+        title: l10n.libraryNoAlbums,
+        subtitle: l10n.libraryNoAlbumsSubtitle,
       );
     }
     final cols = AppBreakpoints.isDesktop(context)
@@ -466,6 +469,7 @@ class _PlaylistsTab extends ConsumerWidget {
     final localLists = ref.watch(userPlaylistsProvider);
     final likedLists = ref.watch(likedPlaylistsProvider);
     final theme = AppThemeScope.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     final buttonsRow = Row(
       children: <Widget>[
@@ -485,8 +489,8 @@ class _PlaylistsTab extends ConsumerWidget {
           Expanded(
             child: _EmptyHint(
               icon: PhosphorIconsRegular.playlist,
-              title: 'No playlists yet',
-              subtitle: 'Tap "Create playlist" or like a playlist to save it here.',
+              title: l10n.libraryNoPlaylists,
+              subtitle: l10n.libraryNoPlaylistsSubtitle,
             ),
           ),
         ],
@@ -500,7 +504,7 @@ class _PlaylistsTab extends ConsumerWidget {
         buttonsRow,
         const SizedBox(height: 12),
         if (localLists.isNotEmpty) ...<Widget>[
-          const SectionHeader(title: 'My Playlists'),
+          SectionHeader(title: l10n.libraryMyPlaylists),
           ReorderableListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -512,7 +516,7 @@ class _PlaylistsTab extends ConsumerWidget {
                 key: ValueKey<int>(p.id),
                 trailingIcon: PhosphorIconsRegular.trash,
                 trailingColor: theme.error,
-                trailingLabel: 'Delete',
+                trailingLabel: l10n.commonDelete,
                 onTrailing: () => ref.read(userPlaylistsProvider.notifier).delete(p.id),
                 child: _buildPlaylistRow(context, theme, p, isLocal: true, index: i),
               );
@@ -521,7 +525,7 @@ class _PlaylistsTab extends ConsumerWidget {
           ),
         ],
         if (likedLists.isNotEmpty) ...<Widget>[
-          const SectionHeader(title: 'Liked Playlists'),
+          SectionHeader(title: l10n.libraryLikedPlaylists),
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -532,7 +536,7 @@ class _PlaylistsTab extends ConsumerWidget {
                 key: ValueKey<String>('liked_${p.id}'),
                 trailingIcon: PhosphorIconsRegular.heartBreak,
                 trailingColor: theme.error,
-                trailingLabel: 'Unlike',
+                trailingLabel: l10n.libraryUnlike,
                 onTrailing: () => ref.read(likedPlaylistsProvider.notifier).toggle(p),
                 child: _buildPlaylistRow(context, theme, p, isLocal: false),
               );
@@ -544,6 +548,7 @@ class _PlaylistsTab extends ConsumerWidget {
   }
 
   Widget _buildCreateButton(BuildContext context, AppTheme theme, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () => _openCreate(context, ref),
@@ -567,7 +572,7 @@ class _PlaylistsTab extends ConsumerWidget {
             ),
             const SizedBox(width: 10),
             Text(
-              'Create playlist',
+              l10n.libraryCreatePlaylist,
               style: TextStyle(
                 color: theme.background,
                 fontWeight: FontWeight.w800,
@@ -644,8 +649,8 @@ class _PlaylistsTab extends ConsumerWidget {
                   const SizedBox(height: 4),
                   Text(
                     isLocal
-                        ? '${p.nbTracks ?? 0} tracks'
-                        : 'Playlist · by ${p.creator?.name ?? 'Deezer'}',
+                        ? l10n.commonTrackCount(p.nbTracks ?? 0)
+                        : 'Playlist · ${l10n.playlistBy(p.creator?.name ?? 'Deezer')}',
                     style: TextStyle(
                       color: theme.onSurfaceMuted,
                       fontSize: 12,
@@ -680,6 +685,7 @@ class _PlaylistsTab extends ConsumerWidget {
 
   Future<void> _openCreate(BuildContext context, WidgetRef ref) async {
     final theme = AppThemeScope.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final nameCtrl = TextEditingController();
     final descCtrl = TextEditingController();
 
@@ -720,7 +726,7 @@ class _PlaylistsTab extends ConsumerWidget {
                       ),
                     ),
                     Text(
-                      'New playlist',
+                      l10n.libraryNewPlaylist,
                       style: TextStyle(
                         color: theme.onSurface,
                         fontSize: 18,
@@ -730,12 +736,12 @@ class _PlaylistsTab extends ConsumerWidget {
                     const SizedBox(height: 18),
                     _UnderlineField(
                       controller: nameCtrl,
-                      hint: 'Playlist name',
+                      hint: l10n.libraryPlaylistName,
                     ),
                     const SizedBox(height: 14),
                     _UnderlineField(
                       controller: descCtrl,
-                      hint: 'Description (optional)',
+                      hint: l10n.libraryDescriptionOptional,
                     ),
                     const SizedBox(height: 20),
                     Row(
@@ -753,7 +759,7 @@ class _PlaylistsTab extends ConsumerWidget {
                               vertical: 8,
                             ),
                             child: Text(
-                              'CANCEL',
+                              l10n.libraryCancel,
                               style: TextStyle(
                                 color: theme.onSurfaceMuted,
                                 fontWeight: FontWeight.w800,
@@ -794,7 +800,7 @@ class _PlaylistsTab extends ConsumerWidget {
                               borderRadius: BorderRadius.circular(999),
                             ),
                             child: Text(
-                              'CREATE',
+                              l10n.libraryCreate,
                               style: TextStyle(
                                 color: theme.background,
                                 fontWeight: FontWeight.w800,
@@ -828,6 +834,7 @@ class _PlaylistsTab extends ConsumerWidget {
   }
 
   Widget _buildImportButton(BuildContext context, AppTheme theme, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () => _openImport(context, ref),
@@ -852,7 +859,7 @@ class _PlaylistsTab extends ConsumerWidget {
             ),
             const SizedBox(width: 10),
             Text(
-              'Import playlist',
+              l10n.libraryImportPlaylist,
               style: TextStyle(
                 color: theme.onSurface,
                 fontWeight: FontWeight.w800,
@@ -867,6 +874,7 @@ class _PlaylistsTab extends ConsumerWidget {
   }
 
   Future<void> _openImport(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
     // Safe snackbar helper — swallows any Flutter internal assertion.
     void snack(String msg) {
       try {
@@ -902,9 +910,9 @@ class _PlaylistsTab extends ConsumerWidget {
     }
 
     if (successTitle != null) {
-      snack('Successfully imported "$successTitle"');
+      snack(l10n.libraryImportSuccess(successTitle));
     } else {
-      snack('Import failed: $errorMsg');
+      snack(l10n.libraryImportFailed(errorMsg ?? ''));
     }
   }
 }
@@ -919,10 +927,11 @@ class _FollowingTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final artists = ref.watch(followedArtistsProvider);
     if (artists.isEmpty) {
+      final l10n = AppLocalizations.of(context)!;
       return _EmptyHint(
         icon: PhosphorIconsRegular.user,
-        title: 'No artists followed',
-        subtitle: 'Follow an artist to see them here.',
+        title: l10n.libraryNoFollowing,
+        subtitle: l10n.libraryNoFollowingSubtitle,
       );
     }
     final cols = AppBreakpoints.isDesktop(context)
@@ -957,10 +966,11 @@ class _DownloadsTab extends ConsumerWidget {
     final downloaded = ref.watch(downloadedTracksProvider);
     
     if (downloaded.isEmpty) {
+      final l10n = AppLocalizations.of(context)!;
       return _EmptyHint(
         icon: PhosphorIconsRegular.cloudArrowDown,
-        title: 'No downloads',
-        subtitle: 'Downloaded tracks for offline play will appear here.',
+        title: l10n.libraryNoDownloads,
+        subtitle: l10n.libraryNoDownloadsSubtitle,
       );
     }
     return ListView.builder(

@@ -16,6 +16,7 @@ import 'core/theme/theme_notifier.dart';
 import 'core/api/deezer_api_client.dart';
 import 'core/api/lastfm_api_client.dart';
 import 'core/audio/local_proxy.dart';
+import 'generated/app_localizations.dart';
 import 'widgets/theme_morph.dart';
 
 late final MediaKitMusicPlayerService _playerService;
@@ -94,6 +95,8 @@ class WaveApp extends ConsumerWidget {
         scaffoldMessengerKey: scaffoldMessengerKey,
         theme: theme.toMaterialTheme(),
         routerConfig: appRouter,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         builder: (context, child) {
           return Stack(
             children: <Widget>[

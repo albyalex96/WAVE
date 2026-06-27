@@ -12,6 +12,7 @@ import '../core/audio/player_providers.dart';
 import '../core/router/app_router.dart';
 import '../core/storage/recently_played.dart';
 import '../core/theme/app_theme.dart';
+import '../generated/app_localizations.dart';
 
 /// Album-cover sized card with title + subtitle, used by Made-for-you,
 /// New releases, Mixes, Editorial, etc.
@@ -129,7 +130,7 @@ class AlbumCard extends ConsumerWidget {
     return CoverCard(
       imageUrl: album.coverBig ?? album.coverMedium ?? album.cover,
       title: album.title,
-      subtitle: subtitleOverride ?? (album.artist?.name ?? 'Album'),
+      subtitle: subtitleOverride ?? (album.artist?.name ?? AppLocalizations.of(context)!.commonAlbum),
       size: size,
       onTap: () {
         ref.read(recentlyPlayedProvider.notifier).push(
@@ -161,7 +162,7 @@ class PlaylistCard extends ConsumerWidget {
       imageUrl:
           playlist.pictureBig ?? playlist.pictureMedium ?? playlist.picture,
       title: playlist.title,
-      subtitle: playlist.creator?.name ?? 'Playlist',
+      subtitle: playlist.creator?.name ?? AppLocalizations.of(context)!.commonPlaylist,
       size: size,
       onTap: () {
         ref.read(recentlyPlayedProvider.notifier).push(
@@ -192,7 +193,7 @@ class ArtistCircle extends ConsumerWidget {
     return CoverCard(
       imageUrl: artist.pictureBig ?? artist.pictureMedium ?? artist.picture,
       title: artist.name,
-      subtitle: 'Artist',
+      subtitle: AppLocalizations.of(context)!.commonArtist,
       size: size,
       shape: BoxShape.circle,
       onTap: () {
@@ -310,7 +311,7 @@ class TrackRow extends ConsumerWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    track.artist?.name ?? 'Unknown artist',
+                    track.artist?.name ?? AppLocalizations.of(context)!.commonUnknownArtist,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -323,7 +324,7 @@ class TrackRow extends ConsumerWidget {
             ),
             const SizedBox(width: 8),
             Text(
-              _fmtDuration(track.duration),
+              _fmtDuration(track.duration, context),
               style: TextStyle(
                 color: theme.onSurfaceMuted,
                 fontSize: 12,
@@ -337,8 +338,8 @@ class TrackRow extends ConsumerWidget {
   }
 }
 
-String _fmtDuration(int? secs) {
-  if (secs == null || secs <= 0) return '--:--';
+String _fmtDuration(int? secs, BuildContext context) {
+  if (secs == null || secs <= 0) return AppLocalizations.of(context)!.commonDurationPlaceholder;
   final m = secs ~/ 60;
   final s = secs % 60;
   return '$m:${s.toString().padLeft(2, '0')}';
@@ -363,7 +364,7 @@ class TrackCard extends ConsumerWidget {
     return CoverCard(
       imageUrl: cover,
       title: track.title,
-      subtitle: track.artist?.name ?? 'Track',
+      subtitle: track.artist?.name ?? AppLocalizations.of(context)!.commonTrack,
       size: size,
       onTap: () async {
         final controls = ref.read(playerControlsProvider);

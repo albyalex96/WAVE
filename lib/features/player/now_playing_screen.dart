@@ -24,6 +24,7 @@ import '../../widgets/player/sleep_timer_dial.dart';
 import '../../widgets/player/waveform_bars.dart';
 import '../../core/downloads/download_manager.dart';
 import '../../core/downloads/download_providers.dart';
+import '../../generated/app_localizations.dart';
 
 /// Now-Playing screen. Branches on `theme.id` to render six distinct
 /// presentations of the same player state.
@@ -136,7 +137,7 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen> {
           Column(
             children: <Widget>[
               Text(
-                'PLAYING FROM',
+                AppLocalizations.of(context)!.playerPlayingFrom,
                 style: TextStyle(
                   color: theme.onSurfaceMuted,
                   fontSize: 9,
@@ -146,7 +147,7 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen> {
               ),
               const SizedBox(height: 2),
               Text(
-                'Queue',
+                AppLocalizations.of(context)!.playerQueue,
                 style: TextStyle(
                   color: theme.onSurface,
                   fontSize: 12,
@@ -422,7 +423,7 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen> {
             children: <Widget>[
               _BottomTextButton(
                 icon: PhosphorIconsRegular.queue,
-                label: 'QUEUE',
+                label: AppLocalizations.of(context)!.playerQueue,
                 onTap: () => showWaveSheet<void>(
                   context: context,
                   builder: (_) => SizedBox(
@@ -435,14 +436,14 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen> {
               ),
               _BottomTextButton(
                 icon: PhosphorIconsRegular.musicNotes,
-                label: _showLyrics ? 'COVER' : 'LYRICS',
+                label: _showLyrics ? AppLocalizations.of(context)!.playerCover : AppLocalizations.of(context)!.playerLyrics,
                 onTap: () => setState(() => _showLyrics = !_showLyrics),
               ),
               _BottomTextButton(
                 icon: PhosphorIconsRegular.clockCounterClockwise,
                 label: timer != null && timer.isActive
                     ? _fmt(timer.remaining)
-                    : 'TIMER',
+                    : AppLocalizations.of(context)!.playerTimer,
                 accent: timer != null && timer.isActive,
                 onTap: () => showWaveSheet<void>(
                   context: context,
@@ -643,7 +644,7 @@ class _EmptyShell extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Nothing is playing',
+                      AppLocalizations.of(context)!.playerNothingPlaying,
                       style: TextStyle(
                         color: theme.onSurface,
                         fontSize: 16,

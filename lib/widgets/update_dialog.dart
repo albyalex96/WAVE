@@ -5,6 +5,7 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import '../services/app_updater_service.dart';
 import '../core/theme/app_theme.dart';
+import '../generated/app_localizations.dart';
 
 import 'package:ota_update/ota_update.dart';
 
@@ -82,7 +83,7 @@ class _UpdateDialogState extends State<UpdateDialog> with SingleTickerProviderSt
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'UPDATE AVAILABLE',
+                          AppLocalizations.of(context)!.updateAvailable,
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
@@ -129,7 +130,7 @@ class _UpdateDialogState extends State<UpdateDialog> with SingleTickerProviderSt
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Current',
+                              AppLocalizations.of(context)!.updateCurrent,
                               style: TextStyle(
                                 fontSize: 11,
                                 color: theme.onSurfaceMuted,
@@ -155,7 +156,7 @@ class _UpdateDialogState extends State<UpdateDialog> with SingleTickerProviderSt
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              'Latest',
+                              AppLocalizations.of(context)!.updateLatest,
                               style: TextStyle(
                                 fontSize: 11,
                                 color: theme.onSurfaceMuted,
@@ -181,7 +182,7 @@ class _UpdateDialogState extends State<UpdateDialog> with SingleTickerProviderSt
                   
                   // Release notes
                   Text(
-                    'WHAT\'S NEW',
+                    AppLocalizations.of(context)!.updateWhatsNew,
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.bold,
@@ -234,8 +235,8 @@ class _UpdateDialogState extends State<UpdateDialog> with SingleTickerProviderSt
                           Expanded(
                             child: Text(
                               widget.updateInfo.isIOS
-                                  ? 'iOS: You\'ll be redirected to GitHub to download the IPA'
-                                  : 'macOS: You\'ll be redirected to GitHub to download',
+                                  ? AppLocalizations.of(context)!.updateIosMessage
+                                  : AppLocalizations.of(context)!.updateMacosMessage,
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.orange.shade200,
@@ -255,7 +256,7 @@ class _UpdateDialogState extends State<UpdateDialog> with SingleTickerProviderSt
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Downloading...',
+                              AppLocalizations.of(context)!.updateDownloading,
                               style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.bold,
@@ -310,7 +311,7 @@ class _UpdateDialogState extends State<UpdateDialog> with SingleTickerProviderSt
                           ),
                         ),
                         child: Text(
-                          'Later',
+                          AppLocalizations.of(context)!.updateLater,
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -333,11 +334,11 @@ class _UpdateDialogState extends State<UpdateDialog> with SingleTickerProviderSt
                           ),
                           elevation: 0,
                         ),
-                        child: const Row(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'Update Now',
+                              AppLocalizations.of(context)!.updateNow,
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
@@ -402,7 +403,7 @@ class _UpdateDialogState extends State<UpdateDialog> with SingleTickerProviderSt
                 case OtaStatus.DOWNLOAD_ERROR:
                 case OtaStatus.CHECKSUM_ERROR:
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Update failed: ${event.status}')),
+                    SnackBar(content: Text(AppLocalizations.of(context)!.updateFailed(event.status))),
                   );
                   Navigator.of(context).pop();
                   break;
@@ -416,7 +417,7 @@ class _UpdateDialogState extends State<UpdateDialog> with SingleTickerProviderSt
           if (mounted) {
             setState(() => _isDownloading = false);
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Download failed: $error')),
+              SnackBar(content: Text(AppLocalizations.of(context)!.updateDownloadFailed(error))),
             );
           }
         },
@@ -425,7 +426,7 @@ class _UpdateDialogState extends State<UpdateDialog> with SingleTickerProviderSt
       if (mounted) {
         setState(() => _isDownloading = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Update failed: $e')),
+          SnackBar(content: Text(AppLocalizations.of(context)!.updateFailed(e.toString()))),
         );
       }
     }
@@ -491,7 +492,7 @@ class _UpdateDialogState extends State<UpdateDialog> with SingleTickerProviderSt
               children: [
                 const Icon(Icons.check_circle, color: Colors.green, size: 32),
                 const SizedBox(width: 12),
-                Text('Download Complete', style: TextStyle(color: theme.onSurface)),
+                Text(AppLocalizations.of(context)!.updateDownloadComplete, style: TextStyle(color: theme.onSurface)),
               ],
             ),
             content: Column(
@@ -499,7 +500,7 @@ class _UpdateDialogState extends State<UpdateDialog> with SingleTickerProviderSt
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Update downloaded to:',
+                  AppLocalizations.of(context)!.updateDownloadedTo,
                   style: TextStyle(color: theme.onSurface.withValues(alpha: 0.7)),
                 ),
                 const SizedBox(height: 8),
@@ -521,8 +522,8 @@ class _UpdateDialogState extends State<UpdateDialog> with SingleTickerProviderSt
                 const SizedBox(height: 16),
                 Text(
                   Platform.isWindows
-                      ? 'Close WAVE and run the installer to update.'
-                      : 'Make the file executable and run it:\nchmod +x "$fileName"\n./$fileName',
+                      ? AppLocalizations.of(context)!.updateWindowsInstructions
+                      : AppLocalizations.of(context)!.updateLinuxInstructions(fileName),
                   style: TextStyle(color: theme.onSurface.withValues(alpha: 0.9)),
                 ),
               ],
@@ -537,14 +538,14 @@ class _UpdateDialogState extends State<UpdateDialog> with SingleTickerProviderSt
                   }
                   if (context.mounted) Navigator.of(context).pop();
                 },
-                child: Text('Open Folder', style: TextStyle(color: theme.onSurface)),
+                child: Text(AppLocalizations.of(context)!.updateOpenFolder, style: TextStyle(color: theme.onSurface)),
               ),
               ElevatedButton(
                 onPressed: () => Navigator.of(context).pop(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: theme.accent,
                 ),
-                child: Text('OK', style: TextStyle(color: theme.background)),
+                child: Text(AppLocalizations.of(context)!.updateOk, style: TextStyle(color: theme.background)),
               ),
             ],
           ),
@@ -558,7 +559,7 @@ class _UpdateDialogState extends State<UpdateDialog> with SingleTickerProviderSt
       if (mounted) {
         setState(() => _isDownloading = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Download failed: $e')),
+          SnackBar(content: Text(AppLocalizations.of(context)!.updateDownloadFailed(e.toString()))),
         );
       }
     }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_theme.dart';
+import '../../../generated/app_localizations.dart';
 import '../nav_destination.dart';
 
 /// Obsidian theme: minimal text-only tabs in small caps with a thin gold
@@ -54,7 +55,7 @@ class ObsidianBottomNav extends StatelessWidget {
                     Expanded(
                       child: _ObsidianTab(
                         theme: theme,
-                        label: destinations[i].label,
+                        label: destinations[i].label(context),
                         active: i == activeIndex,
                         onTap: () => onSelected(i),
                       ),

@@ -2,19 +2,20 @@ import 'package:flutter/widgets.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../core/router/app_router.dart';
+import '../../generated/app_localizations.dart';
 
 /// Description of one of the 5 main navigation destinations. Bottom nav
 /// variants and the desktop sidebar both consume this list.
 @immutable
 class NavDestination {
-  const NavDestination({
+  NavDestination({
     required this.label,
     required this.route,
     required this.icon,
     required this.iconFilled,
   });
 
-  final String label;
+  final String Function(BuildContext) label;
   final String route;
   final IconData icon;
   final IconData iconFilled;
@@ -24,25 +25,25 @@ class NavDestination {
 /// [AppShell].
 final List<NavDestination> kNavDestinations = <NavDestination>[
   NavDestination(
-    label: 'Home',
+    label: (c) => AppLocalizations.of(c)!.navHome,
     route: AppRoutes.home,
     icon: PhosphorIconsRegular.house,
     iconFilled: PhosphorIconsFill.house,
   ),
   NavDestination(
-    label: 'Discover',
+    label: (c) => AppLocalizations.of(c)!.navDiscover,
     route: AppRoutes.discover,
     icon: PhosphorIconsRegular.compass,
     iconFilled: PhosphorIconsFill.compass,
   ),
   NavDestination(
-    label: 'Search',
+    label: (c) => AppLocalizations.of(c)!.navSearch,
     route: AppRoutes.search,
     icon: PhosphorIconsRegular.magnifyingGlass,
     iconFilled: PhosphorIconsFill.magnifyingGlass,
   ),
   NavDestination(
-    label: 'Library',
+    label: (c) => AppLocalizations.of(c)!.navLibrary,
     route: AppRoutes.library,
     icon: PhosphorIconsRegular.stack,
     iconFilled: PhosphorIconsFill.stack,
