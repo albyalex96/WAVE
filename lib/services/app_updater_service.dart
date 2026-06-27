@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class AppUpdaterService {
   static const String githubRepo = 'albyalex96/WAVE';
-  static const String githubApiUrl = 'https://api.github.com/repos/$githubRepo/releases/latest';
+  static const String githubApiUrl = 'https://api.github.com/repos/$githubRepo/releases';
 
   static Future<String> getCurrentVersion() async {
     try {
@@ -28,7 +28,13 @@ class AppUpdaterService {
       final response = await http.get(Uri.parse(githubApiUrl));
 
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
+        final releases = json.decode(response.body) as List;
+        if (releases.isEmpty) return null;
+
+        final data = releases.firstWhere(
+          (r) => r['assets'] != null && (r['assets'] as List).isNotEmpty,
+          orElse: () => releases.first,
+        );
         final latestVersion = (data['tag_name'] as String).replaceFirst('v', '');
         final releaseNotes = data['body'] as String? ?? 'No release notes available';
         final publishedAt = DateTime.parse(data['published_at']);
