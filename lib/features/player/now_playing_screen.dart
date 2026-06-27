@@ -81,7 +81,7 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen> {
                           ),
                         ),
                 ),
-                _buildControlsSection(context, theme, track, player),
+                _buildControlsSection(context, theme, track, player, ab),
               ],
             ),
           ],
@@ -265,6 +265,7 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen> {
     AppTheme theme,
     DeezerTrack track,
     PlayerState player,
+    ABRepeatState ab,
   ) {
     final liked = ref.watch(likedTracksProvider).any((t) => t.id == track.id);
     final timer = ref.watch(sleepTimerProvider);
