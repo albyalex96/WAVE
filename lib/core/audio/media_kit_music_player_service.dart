@@ -87,12 +87,31 @@ class MediaKitMusicPlayerService extends BaseAudioHandler
           }
         }
       }
+      // Restore player state
+      final shuffle = box.get('player_shuffle') as bool? ?? false;
+      final repeat = box.get('player_repeat') as String? ?? 'off';
+      final volume = box.get('player_volume') as num? ?? 1.0;
+      _state = _state.copyWith(
+        shuffle: shuffle,
+        repeat: RepeatMode.values.firstWhere(
+          (e) => e.name == repeat,
+          orElse: () => RepeatMode.off,
+        ),
+        volume: volume.toDouble(),
+      );
       // Apply loaded equalizer settings
       _applyEqualizerToPlayer(_playerA);
       _applyEqualizerToPlayer(_playerB);
     } catch (e) {
       appLogger.w('Failed to load initial settings: $e');
     }
+  }
+
+  Future<void> _persistPlayerSettings() async {
+    final box = Hive.box<dynamic>(HiveBoxes.settings);
+    await box.put('player_shuffle', _state.shuffle);
+    await box.put('player_repeat', _state.repeat.name);
+    await box.put('player_volume', _state.volume);
   }
 
   Map<String, String> _buildStreamHeaders({String? userAgent}) {
@@ -591,6 +610,7 @@ class MediaKitMusicPlayerService extends BaseAudioHandler
     } else {
       _emitQueue(_queue.copyWith(shuffled: value));
     }
+    await _persistPlayerSettings();
   }
 
   @override
@@ -603,6 +623,7 @@ class MediaKitMusicPlayerService extends BaseAudioHandler
     };
     await _playerA.setPlaylistMode(mkMode);
     await _playerB.setPlaylistMode(mkMode);
+    await _persistPlayerSettings();
   }
 
   @override
@@ -612,11 +633,13 @@ class MediaKitMusicPlayerService extends BaseAudioHandler
     if (!_isCrossfading) {
       await _activePlayer.setVolume(v * 100);
     }
+    await _persistPlayerSettings();
   }
 
   @override
   Future<void> setCrossfadeSeconds(int seconds) async {
     _emitPlayer(_state.copyWith(crossfadeSeconds: seconds.clamp(0, 12)));
+    await _persistPlayerSettings();
   }
 
   // ---------------------------------------------------------------------------
