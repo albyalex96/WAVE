@@ -240,7 +240,6 @@ abstract class AppLocalizations {
   String get settingsEqReset;
   String get settingsUpToDate;
   String get settingsCheckUpdates;
-  String get settingsVersion;
 
   // Add to playlist sheet
   String get addToPlaylistTitle;

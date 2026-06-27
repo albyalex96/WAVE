@@ -383,8 +383,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsUpToDate => 'WAVE is up to date!';
   @override
   String get settingsCheckUpdates => 'Check for Updates';
-  @override
-  String get settingsVersion => 'v1.0.3 · Build 3';
 
   @override
   String get addToPlaylistTitle => 'Add to Playlist';

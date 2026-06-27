@@ -243,7 +243,6 @@
   "settingsEqReset": "RESET TO DEFAULT",
   "settingsUpToDate": "WAVE is up to date!",
   "settingsCheckUpdates": "Check for Updates",
-  "settingsVersion": "v1.0.3 · Build 3",
 
   "@@albumScreen": {
     "description": "Add to playlist sheet"

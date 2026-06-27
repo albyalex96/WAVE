@@ -767,12 +767,18 @@ class _AboutBlockState extends State<_AboutBlock> {
                       ),
                     ),
                     const SizedBox(height: 2),
-                    Text(
-                      AppLocalizations.of(context)!.settingsVersion,
-                      style: TextStyle(
-                        color: theme.onSurfaceMuted,
-                        fontSize: 12,
-                      ),
+                    FutureBuilder<String>(
+                      future: AppUpdaterService.getCurrentVersion(),
+                      builder: (context, snapshot) {
+                        final ver = snapshot.data ?? '0.0.0';
+                        return Text(
+                          'v$ver',
+                          style: TextStyle(
+                            color: theme.onSurfaceMuted,
+                            fontSize: 12,
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),

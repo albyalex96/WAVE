@@ -1,0 +1,62 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: ['enhanced']
+  workflow_dispatch:
+
+jobs:
+  android:
+    name: Android (APK)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.9'
+
+      - name: Read version
+        id: version
+        run: |
+          VERSION=$(jq -r '.version' version.json)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          # Sync pubspec.yaml version with version.json
+          sed -i "s/^version: .*$/version: ${VERSION}+1/" pubspec.yaml
+
+      - name: Create .env from secrets
+        run: |
+          echo "DEEZER_PROXY_URL=${{ secrets.DEEZER_PROXY_URL }}" > .env
+          echo "LASTFM_API_KEY=${{ secrets.LASTFM_API_KEY }}" >> .env
+          echo "LASTFM_SHARED_SECRET=${{ secrets.LASTFM_SHARED_SECRET }}" >> .env
+
+      - run: flutter pub get
+      - run: flutter build apk --release --split-per-abi
+
+      - name: Rename APKs
+        run: |
+          VERSION="${{ steps.version.outputs.VERSION }}"
+          for f in build/app/outputs/flutter-apk/app-*-release.apk; do
+            ABI=$(echo "$f" | sed -E 's/.*app-(.*)-release\.apk/\1/')
+            mv "$f" "build/app/outputs/flutter-apk/WaveEnhanced-v${VERSION}-${ABI}.apk"
+          done
+
+      - name: Upload APK artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: WAVE-Android-APKs
+          path: build/app/outputs/flutter-apk/WaveEnhanced-*.apk
+
+      - name: Generate release tag
+        id: tag
+        run: echo "RELEASE_TAG=v${{ steps.version.outputs.VERSION }}" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.RELEASE_TAG }}
+          name: "Wave Enhanced v${{ steps.version.outputs.VERSION }}"
+          body: "APK build from branch \`enhanced\` (commit ${{ github.sha }})"
+          draft: false
+          prerelease: true
+          files: build/app/outputs/flutter-apk/WaveEnhanced-*.apk
