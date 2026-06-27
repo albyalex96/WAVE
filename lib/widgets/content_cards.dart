@@ -8,6 +8,7 @@ import '../core/api/models/deezer_album.dart';
 import '../core/api/models/deezer_artist.dart';
 import '../core/api/models/deezer_playlist.dart';
 import '../core/api/models/deezer_track.dart';
+import '../core/api/models/player_state.dart';
 import '../core/audio/player_providers.dart';
 import '../core/router/app_router.dart';
 import '../core/storage/recently_played.dart';

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../core/api/models/deezer_track.dart';
+import '../core/api/models/player_state.dart';
 import '../core/audio/player_providers.dart';
 import '../core/storage/library_providers.dart';
 import '../core/theme/app_theme.dart';
