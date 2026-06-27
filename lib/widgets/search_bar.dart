@@ -20,7 +20,7 @@ class WaveSearchBar extends StatelessWidget {
   final FocusNode focusNode;
   final ValueChanged<String> onChanged;
   final ValueChanged<String> onSubmitted;
-  final String hint;
+  final String? hint;
 
   @override
   Widget build(BuildContext context) {

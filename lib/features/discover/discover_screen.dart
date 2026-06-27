@@ -157,7 +157,7 @@ class _NewMusicTab extends ConsumerWidget {
           physics: const BouncingScrollPhysics(),
           slivers: <Widget>[
             SliverToBoxAdapter(child: _Hero(album: albums.first)),
-            const SliverToBoxAdapter(
+            SliverToBoxAdapter(
               child: SectionHeader(title: AppLocalizations.of(context)!.discoverFreshDrops),
             ),
             SliverPadding(

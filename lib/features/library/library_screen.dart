@@ -593,6 +593,7 @@ class _PlaylistsTab extends ConsumerWidget {
     required bool isLocal,
     int? index,
   }) {
+    final l10n = AppLocalizations.of(context)!;
     final hasCover = (p.pictureMedium ?? p.picture) != null;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,

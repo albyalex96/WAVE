@@ -321,7 +321,7 @@ class _PlaylistScreenState extends ConsumerState<PlaylistScreen> {
             <String>[
               if ((pl.creator?.name ?? '').isNotEmpty) AppLocalizations.of(context)!.playlistBy(pl.creator!.name),
               if ((pl.fans ?? 0) > 0) AppLocalizations.of(context)!.commonFollowers(pl.fans.toString()),
-              if ((pl.nbTracks ?? 0) > 0) AppLocalizations.of(context)!.commonTrackCount(pl.nbTracks),
+              if ((pl.nbTracks ?? 0) > 0) AppLocalizations.of(context)!.commonTrackCount(pl.nbTracks!),
               if (mins > 0) '${mins}m',
             ].join('  ·  '),
           textAlign: TextAlign.center,
