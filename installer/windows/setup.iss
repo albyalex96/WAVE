@@ -5,9 +5,9 @@
 
 #define MyAppName      "WAVE"
 #define MyAppVersion   "1.0.0"
-#define MyAppPublisher "ayman708-UX"
+#define MyAppPublisher "albyalex96"
 #define MyAppExeName   "wave.exe"
-#define MyAppURL       "https://github.com/ayman708-UX/WAVE"
+#define MyAppURL       "https://github.com/albyalex96/WAVE"
 
 [Setup]
 AppId={{8A7B2C3D-4E5F-6G7H-8I9J-0K1L2M3N4O5P}
