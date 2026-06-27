@@ -88,17 +88,7 @@ class MediaKitMusicPlayerService extends BaseAudioHandler
         }
       }
       // Restore player state
-      final shuffle = box.get('player_shuffle') as bool? ?? false;
-      final repeat = box.get('player_repeat') as String? ?? 'off';
-      final volume = box.get('player_volume') as num? ?? 1.0;
-      _state = _state.copyWith(
-        shuffle: shuffle,
-        repeat: RepeatMode.values.firstWhere(
-          (e) => e.name == repeat,
-          orElse: () => RepeatMode.off,
-        ),
-        volume: volume.toDouble(),
-      );
+      _restorePlayerSettings(box);
       // Apply loaded equalizer settings
       _applyEqualizerToPlayer(_playerA);
       _applyEqualizerToPlayer(_playerB);
@@ -107,8 +97,44 @@ class MediaKitMusicPlayerService extends BaseAudioHandler
     }
   }
 
+  void _restorePlayerSettings(Box<dynamic> box) {
+    bool remember = true;
+    final raw = box.get('app_settings');
+    if (raw is String && raw.isNotEmpty) {
+      try {
+        final json = jsonDecode(raw);
+        if (json is Map) {
+          remember = json['rememberPlayerSettings'] as bool? ?? true;
+        }
+      } catch (_) {}
+    } else if (raw is Map) {
+      remember = raw['rememberPlayerSettings'] as bool? ?? true;
+    }
+    if (!remember) return;
+    final shuffle = box.get('player_shuffle') as bool? ?? false;
+    final repeat = box.get('player_repeat') as String? ?? 'off';
+    final volume = box.get('player_volume') as num? ?? 1.0;
+    _state = _state.copyWith(
+      shuffle: shuffle,
+      repeat: RepeatMode.values.firstWhere(
+        (e) => e.name == repeat,
+        orElse: () => RepeatMode.off,
+      ),
+      volume: volume.toDouble(),
+    );
+  }
+
   Future<void> _persistPlayerSettings() async {
     final box = Hive.box<dynamic>(HiveBoxes.settings);
+    final raw = box.get('app_settings');
+    bool remember = true;
+    if (raw is String && raw.isNotEmpty) {
+      final json = jsonDecode(raw);
+      if (json is Map) {
+        remember = json['rememberPlayerSettings'] as bool? ?? true;
+      }
+    }
+    if (!remember) return;
     await box.put('player_shuffle', _state.shuffle);
     await box.put('player_repeat', _state.repeat.name);
     await box.put('player_volume', _state.volume);

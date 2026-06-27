@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -42,6 +43,8 @@ class SettingsScreen extends ConsumerWidget {
             _SectionTitle(AppLocalizations.of(context)!.settingsEqualizer),
             SizedBox(height: 12),
             _EqualizerCard(),
+            SizedBox(height: 28),
+            _RememberSettingsRow(),
             SizedBox(height: 28),
             _SectionTitle(AppLocalizations.of(context)!.settingsAbout),
             SizedBox(height: 12),
@@ -375,6 +378,44 @@ class _ThemeMockPainter extends CustomPainter {
 }
 
 
+
+// ---------------------------------------------------------------------------
+// Remember player settings --------------------------------------------------
+
+class _RememberSettingsRow extends ConsumerWidget {
+  const _RememberSettingsRow();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = AppThemeScope.of(context);
+    final value = ref.watch(appSettingsProvider).rememberPlayerSettings;
+    return _Card(
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              AppLocalizations.of(context)!.settingsRememberPlayer,
+              style: TextStyle(
+                color: theme.onSurface,
+                fontSize: 14,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+          Transform.scale(
+            scale: 0.85,
+            child: CupertinoSwitch(
+              value: value,
+              activeColor: theme.accent,
+              onChanged: (v) =>
+                  ref.read(appSettingsProvider.notifier).setRememberPlayerSettings(v),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Crossfade ----------------------------------------------------------------

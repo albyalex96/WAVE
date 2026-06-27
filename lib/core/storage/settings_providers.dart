@@ -19,6 +19,7 @@ class AppSettings {
     this.notifyNewReleases = true,
     this.notifyRecommendations = true,
     this.notifyPlaybackErrors = true,
+    this.rememberPlayerSettings = true,
   });
 
   final AudioQuality audioQuality;
@@ -29,6 +30,7 @@ class AppSettings {
   final bool notifyNewReleases;
   final bool notifyRecommendations;
   final bool notifyPlaybackErrors;
+  final bool rememberPlayerSettings;
 
   AppSettings copyWith({
     AudioQuality? audioQuality,
@@ -39,6 +41,7 @@ class AppSettings {
     bool? notifyNewReleases,
     bool? notifyRecommendations,
     bool? notifyPlaybackErrors,
+    bool? rememberPlayerSettings,
   }) {
     return AppSettings(
       audioQuality: audioQuality ?? this.audioQuality,
@@ -51,6 +54,8 @@ class AppSettings {
           notifyRecommendations ?? this.notifyRecommendations,
       notifyPlaybackErrors:
           notifyPlaybackErrors ?? this.notifyPlaybackErrors,
+      rememberPlayerSettings:
+          rememberPlayerSettings ?? this.rememberPlayerSettings,
     );
   }
 
@@ -63,6 +68,7 @@ class AppSettings {
         'notifyNewReleases': notifyNewReleases,
         'notifyRecommendations': notifyRecommendations,
         'notifyPlaybackErrors': notifyPlaybackErrors,
+        'rememberPlayerSettings': rememberPlayerSettings,
       };
 
   factory AppSettings.fromJson(Map<String, dynamic> json) {
@@ -92,6 +98,8 @@ class AppSettings {
           json['notifyRecommendations'] as bool? ?? true,
       notifyPlaybackErrors:
           json['notifyPlaybackErrors'] as bool? ?? true,
+      rememberPlayerSettings:
+          json['rememberPlayerSettings'] as bool? ?? true,
     );
   }
 }
@@ -163,6 +171,11 @@ class AppSettingsNotifier extends Notifier<AppSettings> {
 
   Future<void> setNotifyPlaybackErrors(bool v) async {
     state = state.copyWith(notifyPlaybackErrors: v);
+    await _persist();
+  }
+
+  Future<void> setRememberPlayerSettings(bool v) async {
+    state = state.copyWith(rememberPlayerSettings: v);
     await _persist();
   }
 }
