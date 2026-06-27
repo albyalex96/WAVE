@@ -26,6 +26,7 @@ class CoverCard extends ConsumerWidget {
     this.size = 150,
     this.shape = BoxShape.rectangle,
     this.overlay,
+    this.badge,
   });
 
   final String? imageUrl;
@@ -37,6 +38,9 @@ class CoverCard extends ConsumerWidget {
 
   /// Optional gradient overlay rendered over the cover (used by mix cards).
   final Widget? overlay;
+
+  /// Optional badge rendered in the top-right corner.
+  final Widget? badge;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -79,6 +83,12 @@ class CoverCard extends ConsumerWidget {
                     else
                       placeholder,
                     if (overlay != null) Positioned.fill(child: overlay!),
+                    if (badge != null)
+                      Positioned(
+                        top: 6,
+                        right: 6,
+                        child: badge!,
+                      ),
                   ],
                 ),
               ),
@@ -236,6 +246,9 @@ class TrackRow extends ConsumerWidget {
     final cover = track.album?.coverMedium ??
         track.album?.cover ??
         track.album?.coverSmall;
+    final player = ref.watch(playerSnapshotProvider);
+    final isLoading = player.currentTrack?.id == track.id &&
+        (player.status == PlaybackStatus.loading || player.status == PlaybackStatus.buffering);
     final placeholder = Container(
       width: 48,
       height: 48,
@@ -272,14 +285,23 @@ class TrackRow extends ConsumerWidget {
             if (showRank)
               SizedBox(
                 width: 28,
-                child: Text(
-                  '${indexInQueue + 1}',
-                  style: TextStyle(
-                    color: theme.onSurfaceMuted,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 13,
-                  ),
-                ),
+                child: isLoading
+                    ? SizedBox(
+                        width: 14,
+                        height: 14,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(theme.accent),
+                        ),
+                      )
+                    : Text(
+                        '${indexInQueue + 1}',
+                        style: TextStyle(
+                          color: theme.onSurfaceMuted,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 13,
+                        ),
+                      ),
               ),
             ClipRRect(
               borderRadius: BorderRadius.circular(theme.cardRadius == 0 ? 0 : 6),
@@ -361,11 +383,24 @@ class TrackCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final cover = track.album?.coverBig ?? track.album?.coverMedium ?? track.album?.cover;
+    final player = ref.watch(playerSnapshotProvider);
+    final isLoading = player.currentTrack?.id == track.id &&
+        (player.status == PlaybackStatus.loading || player.status == PlaybackStatus.buffering);
     return CoverCard(
       imageUrl: cover,
       title: track.title,
       subtitle: track.artist?.name ?? AppLocalizations.of(context)!.commonTrack,
       size: size,
+      badge: isLoading
+          ? SizedBox(
+              width: 18,
+              height: 18,
+              child: CircularProgressIndicator(
+                strokeWidth: 2.5,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
+            )
+          : null,
       onTap: () async {
         final controls = ref.read(playerControlsProvider);
         final indexInQueue = queue.indexOf(track);

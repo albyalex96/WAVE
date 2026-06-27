@@ -38,6 +38,9 @@ class DetailTrackRow extends ConsumerWidget {
         .watch(likedTracksProvider)
         .any((t) => t.id == track.id);
     final cover = track.album?.coverSmall ?? track.album?.cover;
+    final player = ref.watch(playerSnapshotProvider);
+    final isLoading = player.currentTrack?.id == track.id &&
+        (player.status == PlaybackStatus.loading || player.status == PlaybackStatus.buffering);
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () =>
@@ -49,17 +52,26 @@ class DetailTrackRow extends ConsumerWidget {
           children: <Widget>[
             SizedBox(
               width: 28,
-              child: Text(
-                '$position',
-                style: TextStyle(
-                  color: theme.onSurfaceMuted,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w800,
-                  fontFeatures: const <FontFeature>[
-                    FontFeature.tabularFigures(),
-                  ],
-                ),
-              ),
+              child: isLoading
+                  ? SizedBox(
+                      width: 14,
+                      height: 14,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(theme.accent),
+                      ),
+                    )
+                  : Text(
+                      '$position',
+                      style: TextStyle(
+                        color: theme.onSurfaceMuted,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w800,
+                        fontFeatures: const <FontFeature>[
+                          FontFeature.tabularFigures(),
+                        ],
+                      ),
+                    ),
             ),
             if (showArtist) ...<Widget>[
               ClipRRect(
