@@ -6,6 +6,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:media_kit/media_kit.dart' as mk;
 
+import '../api/models/ab_repeat_state.dart';
 import '../api/models/deezer_track.dart';
 import '../api/models/player_state.dart';
 import '../api/models/queue_state.dart';
@@ -38,6 +39,8 @@ class MediaKitMusicPlayerService extends BaseAudioHandler
       StreamController<PlayerState>.broadcast();
   final StreamController<QueueState> _queueCtrl =
       StreamController<QueueState>.broadcast();
+  final StreamController<ABRepeatState> _abCtrl =
+      StreamController<ABRepeatState>.broadcast();
 
   PlayerState _state = const PlayerState();
   QueueState _queue = const QueueState();
@@ -48,6 +51,7 @@ class MediaKitMusicPlayerService extends BaseAudioHandler
   bool _isCrossfading = false;
   bool _autoCrossfadeTriggered = false;
   List<double> _equalizerBandsDb = const <double>[0, 0, 0, 0, 0];
+  ABRepeatState _abState = const ABRepeatState();
 
   void _initPlayer(mk.Player player) {
     player.stream.playing.listen((v) => _onPlayingChanged(player, v));
@@ -111,6 +115,15 @@ class MediaKitMusicPlayerService extends BaseAudioHandler
       remember = raw['rememberPlayerSettings'] as bool? ?? true;
     }
     if (!remember) return;
+    final abAms = box.get('ab_point_a') as int?;
+    final abBms = box.get('ab_point_b') as int?;
+    if (abAms != null && abBms != null) {
+      _abState = ABRepeatState(
+        pointA: Duration(milliseconds: abAms),
+        pointB: Duration(milliseconds: abBms),
+      );
+    }
+    _abCtrl.add(_abState);
     final shuffle = box.get('player_shuffle') as bool? ?? false;
     final repeat = box.get('player_repeat') as String? ?? 'off';
     final volume = box.get('player_volume') as num? ?? 1.0;
@@ -138,6 +151,15 @@ class MediaKitMusicPlayerService extends BaseAudioHandler
     await box.put('player_shuffle', _state.shuffle);
     await box.put('player_repeat', _state.repeat.name);
     await box.put('player_volume', _state.volume);
+    final abA = _abState.pointA?.inMilliseconds;
+    final abB = _abState.pointB?.inMilliseconds;
+    if (abA == null && abB == null) {
+      await box.delete('ab_point_a');
+      await box.delete('ab_point_b');
+    } else {
+      await box.put('ab_point_a', abA);
+      await box.put('ab_point_b', abB);
+    }
   }
 
   Map<String, String> _buildStreamHeaders({String? userAgent}) {
@@ -191,10 +213,16 @@ class MediaKitMusicPlayerService extends BaseAudioHandler
   Stream<QueueState> get queueStateStream => _queueCtrl.stream;
 
   @override
+  Stream<ABRepeatState> get abRepeatStateStream => _abCtrl.stream;
+
+  @override
   PlayerState get playerState => _state;
 
   @override
   QueueState get queueState => _queue;
+
+  @override
+  ABRepeatState get abRepeatState => _abState;
 
   void _emitPlayer(PlayerState next) {
     _state = next;
@@ -286,6 +314,17 @@ class MediaKitMusicPlayerService extends BaseAudioHandler
     if (pos == _state.position) return;
     _emitPlayer(_state.copyWith(position: pos));
 
+    // A-B repeat: seek back to point A when reaching point B
+    if (_abState.isActive && _state.duration > Duration.zero && !_isCrossfading) {
+      final a = _abState.pointA!;
+      final b = _abState.pointB!;
+      final minSpan = const Duration(milliseconds: 500);
+      if (pos >= b && (b - a) >= minSpan) {
+        unawaited(_activePlayer.seek(a));
+        return;
+      }
+    }
+
     // Check for automatic crossfade
     if (!_isCrossfading && !_autoCrossfadeTriggered && _state.duration > Duration.zero && _state.crossfadeSeconds > 0) {
       final remaining = _state.duration - pos;
@@ -352,6 +391,8 @@ class MediaKitMusicPlayerService extends BaseAudioHandler
   /// Only called from auto-crossfade and skip next/prev (manual short fade).
   Future<void> _startPlayback(DeezerTrack track, {required bool autoCrossfade}) async {
     _autoCrossfadeTriggered = false;
+    _abState = const ABRepeatState();
+    _abCtrl.add(_abState);
 
     final int fadeSecs = _state.crossfadeSeconds;
     final crossfadeDuration = autoCrossfade
@@ -665,6 +706,36 @@ class MediaKitMusicPlayerService extends BaseAudioHandler
   @override
   Future<void> setCrossfadeSeconds(int seconds) async {
     _emitPlayer(_state.copyWith(crossfadeSeconds: seconds.clamp(0, 12)));
+    await _persistPlayerSettings();
+  }
+
+  // ---------------------------------------------------------------------------
+  // A-B repeat ----------------------------------------------------------------
+
+  @override
+  Future<void> setABPointA() async {
+    final pos = _state.position;
+    _abState = _abState.copyWith(pointA: pos);
+    if (_abState.isActive) {
+      _abCtrl.add(_abState);
+    } else {
+      _abCtrl.add(_abState);
+    }
+    await _persistPlayerSettings();
+  }
+
+  @override
+  Future<void> setABPointB() async {
+    final pos = _state.position;
+    _abState = _abState.copyWith(pointB: pos);
+    _abCtrl.add(_abState);
+    await _persistPlayerSettings();
+  }
+
+  @override
+  Future<void> clearABRepeat() async {
+    _abState = const ABRepeatState();
+    _abCtrl.add(_abState);
     await _persistPlayerSettings();
   }
 

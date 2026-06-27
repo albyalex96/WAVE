@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../api/models/ab_repeat_state.dart';
 import '../api/models/deezer_track.dart';
 import '../api/models/player_state.dart';
 import '../api/models/queue_state.dart';
@@ -14,9 +15,13 @@ abstract class MusicPlayerService {
   /// Streams the live [QueueState] (history + upcoming).
   Stream<QueueState> get queueStateStream;
 
+  /// Streams the live [ABRepeatState].
+  Stream<ABRepeatState> get abRepeatStateStream;
+
   /// Latest snapshot — useful for synchronous reads.
   PlayerState get playerState;
   QueueState get queueState;
+  ABRepeatState get abRepeatState;
 
   // ---------------------------------------------------------------------------
   // Playback control
@@ -58,6 +63,19 @@ abstract class MusicPlayerService {
   /// 5-band equaliser values (–12..12 dB). UI-driven, may no-op on backends
   /// that lack EQ support.
   Future<void> setEqualizer(List<double> bandsDb);
+
+  // ---------------------------------------------------------------------------
+  // A-B repeat
+  // ---------------------------------------------------------------------------
+
+  /// Set point A at current position. If A and B are both set, A-B loop activates.
+  Future<void> setABPointA();
+
+  /// Set point B at current position. If A and B are both set, A-B loop activates.
+  Future<void> setABPointB();
+
+  /// Clear A-B repeat.
+  Future<void> clearABRepeat();
 
   Future<void> dispose();
 }

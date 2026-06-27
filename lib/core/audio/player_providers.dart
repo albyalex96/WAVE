@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../api/models/ab_repeat_state.dart';
 import '../api/models/player_state.dart';
 import '../api/models/queue_state.dart';
 import 'music_player_service.dart';
@@ -50,6 +51,12 @@ final playerControlsProvider = Provider<MusicPlayerService>((ref) {
 
 /// Helper to listen to a stream-only [BuildContext] reactively without
 /// re-importing flutter_riverpod everywhere.
+/// A-B repeat state.
+final abRepeatStateProvider = StreamProvider<ABRepeatState>((ref) {
+  final svc = ref.watch(musicPlayerServiceProvider);
+  return svc.abRepeatStateStream;
+});
+
 extension PlayerWidgetRefX on WidgetRef {
   PlayerState get playerSnapshot => watch(playerSnapshotProvider);
   QueueState get queueSnapshot => watch(queueSnapshotProvider);

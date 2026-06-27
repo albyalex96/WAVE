@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
+import '../../core/api/models/ab_repeat_state.dart';
 import '../../core/api/models/deezer_track.dart';
 import '../../core/api/models/player_state.dart' hide RepeatMode;
 import '../../core/api/models/player_state.dart' as ps show RepeatMode;
@@ -42,6 +43,10 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen> {
   Widget build(BuildContext context) {
     final theme = AppThemeScope.of(context);
     final player = ref.watch(playerSnapshotProvider);
+    final ab = ref.watch(abRepeatStateProvider).maybeWhen(
+          data: (s) => s,
+          orElse: () => const ABRepeatState(),
+        );
     final track = player.currentTrack;
     if (track == null) {
       return _EmptyShell(theme: theme);
@@ -337,6 +342,8 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen> {
                 : Duration(seconds: track.duration ?? 0),
             buffered: player.buffered,
             onSeek: (p) => ref.read(playerControlsProvider).seek(p),
+            abPointA: ab.pointA,
+            abPointB: ab.pointB,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
@@ -439,6 +446,7 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen> {
                 label: _showLyrics ? AppLocalizations.of(context)!.playerCover : AppLocalizations.of(context)!.playerLyrics,
                 onTap: () => setState(() => _showLyrics = !_showLyrics),
               ),
+              _ABRepeatButton(),
               _BottomTextButton(
                 icon: PhosphorIconsRegular.clockCounterClockwise,
                 label: timer != null && timer.isActive
@@ -562,6 +570,58 @@ class _ToggleIconButton extends StatelessWidget {
           icon,
           color: active ? theme.accent : theme.onSurfaceMuted,
           size: 22,
+        ),
+      ),
+    );
+  }
+}
+
+class _ABRepeatButton extends ConsumerWidget {
+  const _ABRepeatButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = AppThemeScope.of(context);
+    final ab = ref.watch(abRepeatStateProvider).maybeWhen(
+          data: (s) => s,
+          orElse: () => const ABRepeatState(),
+        );
+    final accent = ab.isActive;
+    final color = accent ? theme.accent : theme.onSurface;
+    final label = ab.isActive
+        ? 'A-B'
+        : ab.hasPointA
+            ? 'A'
+            : 'A-B';
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        final svc = ref.read(playerControlsProvider);
+        if (ab.isActive) {
+          svc.clearABRepeat();
+        } else if (ab.hasPointA) {
+          svc.setABPointB();
+        } else {
+          svc.setABPointA();
+        }
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Icon(PhosphorIconsRegular.selection, color: color, size: 16),
+            const SizedBox(width: 6),
+            Text(
+              label,
+              style: TextStyle(
+                color: color,
+                fontSize: 11,
+                letterSpacing: 1.4,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ],
         ),
       ),
     );

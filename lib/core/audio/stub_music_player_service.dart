@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import '../api/models/ab_repeat_state.dart';
 import '../api/models/deezer_track.dart';
 import '../api/models/player_state.dart';
 import '../api/models/queue_state.dart';
@@ -19,6 +20,8 @@ class StubMusicPlayerService implements MusicPlayerService {
       StreamController<PlayerState>.broadcast();
   final StreamController<QueueState> _queueCtrl =
       StreamController<QueueState>.broadcast();
+  final StreamController<ABRepeatState> _abCtrl =
+      StreamController<ABRepeatState>.broadcast();
 
   PlayerState _player = const PlayerState();
   QueueState _queue = const QueueState();
@@ -28,6 +31,14 @@ class StubMusicPlayerService implements MusicPlayerService {
 
   @override
   Stream<QueueState> get queueStateStream => _queueCtrl.stream;
+
+  @override
+  Stream<ABRepeatState> get abRepeatStateStream => _abCtrl.stream;
+
+  ABRepeatState _abState = const ABRepeatState();
+
+  @override
+  ABRepeatState get abRepeatState => _abState;
 
   @override
   PlayerState get playerState => _player;
@@ -237,8 +248,29 @@ class StubMusicPlayerService implements MusicPlayerService {
   }
 
   @override
+  Future<void> setABPointA() async {
+    final pos = _player.position;
+    _abState = _abState.copyWith(pointA: pos);
+    _abCtrl.add(_abState);
+  }
+
+  @override
+  Future<void> setABPointB() async {
+    final pos = _player.position;
+    _abState = _abState.copyWith(pointB: pos);
+    _abCtrl.add(_abState);
+  }
+
+  @override
+  Future<void> clearABRepeat() async {
+    _abState = const ABRepeatState();
+    _abCtrl.add(_abState);
+  }
+
+  @override
   Future<void> dispose() async {
     await _playerCtrl.close();
     await _queueCtrl.close();
+    await _abCtrl.close();
   }
 }

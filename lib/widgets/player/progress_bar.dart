@@ -12,6 +12,8 @@ class WaveProgressBar extends StatefulWidget {
     required this.buffered,
     required this.onSeek,
     this.height = 36,
+    this.abPointA,
+    this.abPointB,
   });
 
   final Duration position;
@@ -19,6 +21,8 @@ class WaveProgressBar extends StatefulWidget {
   final Duration buffered;
   final ValueChanged<Duration> onSeek;
   final double height;
+  final Duration? abPointA;
+  final Duration? abPointB;
 
   @override
   State<WaveProgressBar> createState() => _WaveProgressBarState();
@@ -85,6 +89,12 @@ class _WaveProgressBarState extends State<WaveProgressBar> {
                       filled: theme.accent,
                       thumb: theme.accent,
                       showThumb: dragging,
+                      abRatioA: widget.abPointA != null && widget.duration > Duration.zero
+                          ? (widget.abPointA!.inMilliseconds / widget.duration.inMilliseconds).clamp(0.0, 1.0)
+                          : null,
+                      abRatioB: widget.abPointB != null && widget.duration > Duration.zero
+                          ? (widget.abPointB!.inMilliseconds / widget.duration.inMilliseconds).clamp(0.0, 1.0)
+                          : null,
                     ),
                   ),
                 ),
@@ -141,6 +151,8 @@ class _ProgressPainter extends CustomPainter {
     required this.filled,
     required this.thumb,
     required this.showThumb,
+    this.abRatioA,
+    this.abRatioB,
   });
 
   final double ratio;
@@ -150,6 +162,8 @@ class _ProgressPainter extends CustomPainter {
   final Color filled;
   final Color thumb;
   final bool showThumb;
+  final double? abRatioA;
+  final double? abRatioB;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -160,11 +174,36 @@ class _ProgressPainter extends CustomPainter {
       const Radius.circular(2),
     );
     canvas.drawRRect(trackRect, Paint()..color = track);
+
+    // A-B region highlight
+    if (abRatioA != null && abRatioB != null) {
+      final abRect = Rect.fromLTRB(
+        size.width * abRatioA!,
+        cy - trackHeight / 2,
+        size.width * abRatioB!,
+        cy + trackHeight / 2,
+      );
+      canvas.drawRect(abRect, Paint()..color = filled.withValues(alpha: 0.4));
+    }
+
     final bufferedRect = RRect.fromRectAndRadius(
       Rect.fromLTWH(0, cy - trackHeight / 2, size.width * bufferedRatio, trackHeight),
       const Radius.circular(2),
     );
     canvas.drawRRect(bufferedRect, Paint()..color = buffered);
+
+    // A-B markers above the track
+    if (abRatioA != null) {
+      final x = size.width * abRatioA!;
+      canvas.drawCircle(Offset(x, cy - 8), 3, Paint()..color = filled);
+      _drawLabel(canvas, 'A', x, cy - 16, filled, size.width);
+    }
+    if (abRatioB != null) {
+      final x = size.width * abRatioB!;
+      canvas.drawCircle(Offset(x, cy - 8), 3, Paint()..color = filled);
+      _drawLabel(canvas, 'B', x, cy - 16, filled, size.width);
+    }
+
     final filledRect = RRect.fromRectAndRadius(
       Rect.fromLTWH(0, cy - trackHeight / 2, size.width * ratio, trackHeight),
       const Radius.circular(2),
@@ -179,10 +218,21 @@ class _ProgressPainter extends CustomPainter {
     );
   }
 
+  void _drawLabel(Canvas canvas, String text, double x, double y, Color color, double width) {
+    final tp = TextPainter(
+      text: TextSpan(text: text, style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.w900)),
+      textDirection: TextDirection.ltr,
+    )..layout();
+    final tx = (x - tp.width / 2).clamp(0.0, width - tp.width);
+    tp.paint(canvas, Offset(tx, y));
+  }
+
   @override
   bool shouldRepaint(covariant _ProgressPainter old) =>
       old.ratio != ratio ||
       old.bufferedRatio != bufferedRatio ||
       old.showThumb != showThumb ||
-      old.filled != filled;
+      old.filled != filled ||
+      old.abRatioA != abRatioA ||
+      old.abRatioB != abRatioB;
 }
