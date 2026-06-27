@@ -12,9 +12,11 @@ class WaveformBars extends StatefulWidget {
     this.barCount = 32,
     this.height = 80,
     this.color,
+    this.isLoading = false,
   });
 
   final bool isPlaying;
+  final bool isLoading;
   final int barCount;
   final double height;
   final Color? color;
@@ -45,6 +47,8 @@ class _WaveformBarsState extends State<WaveformBars>
   void _sync() {
     if (widget.isPlaying) {
       if (!_ctrl.isAnimating) _ctrl.repeat();
+    } else if (widget.isLoading) {
+      if (!_ctrl.isAnimating) _ctrl.repeat();
     } else {
       _ctrl.stop();
     }
@@ -70,6 +74,7 @@ class _WaveformBarsState extends State<WaveformBars>
               barCount: widget.barCount,
               color: widget.color ?? theme.accent,
               isPlaying: widget.isPlaying,
+              isLoading: widget.isLoading,
             ),
             size: Size.infinite,
           );
@@ -85,12 +90,14 @@ class _WavePainter extends CustomPainter {
     required this.barCount,
     required this.color,
     required this.isPlaying,
+    this.isLoading = false,
   });
 
   final double t;
   final int barCount;
   final Color color;
   final bool isPlaying;
+  final bool isLoading;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -101,7 +108,9 @@ class _WavePainter extends CustomPainter {
       final phase = (i / barCount) * math.pi * 4 + t * math.pi * 2;
       final amp = isPlaying
           ? 0.45 + 0.55 * (math.sin(phase) * 0.5 + 0.5)
-          : 0.18;
+          : isLoading
+              ? 0.25 + 0.15 * (math.sin(t * math.pi * 2 + i * 0.3) * 0.5 + 0.5)
+              : 0.18;
       final h = size.height * amp;
       final x = i * (barWidth + gap);
       final rect = RRect.fromRectAndRadius(
@@ -114,7 +123,7 @@ class _WavePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _WavePainter old) =>
-      old.t != t || old.isPlaying != isPlaying || old.color != color;
+      old.t != t || old.isPlaying != isPlaying || old.color != color || old.isLoading != isLoading;
 }
 
 /// Tiny 3-bar equalizer icon shown in the mini-player when playing.

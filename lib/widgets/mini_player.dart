@@ -46,6 +46,7 @@ class _MiniPlayerCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final track = state.currentTrack!;
     final cover = track.album?.coverSmall ?? track.album?.cover;
+    final isLoading = state.status == PlaybackStatus.loading || state.status == PlaybackStatus.buffering;
     final isPlaying = state.status == PlaybackStatus.playing;
     final progress = state.duration.inMilliseconds == 0
         ? 0.0
@@ -134,7 +135,20 @@ class _MiniPlayerCard extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  _MiniIconButton(
+                  if (isLoading)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 9),
+                      child: SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.5,
+                          valueColor: AlwaysStoppedAnimation<Color>(theme.onSurface),
+                        ),
+                      ),
+                    )
+                  else
+                    _MiniIconButton(
                     icon: isPlaying
                         ? PhosphorIconsRegular.pause
                         : PhosphorIconsRegular.play,

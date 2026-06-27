@@ -249,6 +249,7 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: WaveformBars(
                       isPlaying: s.status == PlaybackStatus.playing,
+                      isLoading: s.status == PlaybackStatus.loading || s.status == PlaybackStatus.buffering,
                       height: 36,
                     ),
                   ),
@@ -397,6 +398,7 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen> {
               ),
               PlayPauseButton(
                 isPlaying: player.status == PlaybackStatus.playing,
+                isLoading: player.status == PlaybackStatus.loading || player.status == PlaybackStatus.buffering,
                 onTap: () =>
                     ref.read(playerControlsProvider).togglePlayPause(),
                 size: switch (theme.id) {

@@ -14,9 +14,11 @@ class PlayPauseButton extends StatefulWidget {
     this.iconColor,
     this.background,
     this.shape = BoxShape.circle,
+    this.isLoading = false,
   });
 
   final bool isPlaying;
+  final bool isLoading;
   final VoidCallback onTap;
   final double size;
   final Color? iconColor;
@@ -85,19 +87,28 @@ class _PlayPauseButtonState extends State<PlayPauseButton>
                       ? BorderRadius.circular(12)
                       : null,
                 ),
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 180),
-                  transitionBuilder: (child, anim) => FadeTransition(
-                    opacity: anim,
-                    child: ScaleTransition(scale: anim, child: child),
-                  ),
-                  child: Icon(
-                    widget.isPlaying ? PhosphorIconsFill.pause : PhosphorIconsFill.play,
-                    key: ValueKey<bool>(widget.isPlaying),
-                    color: fg,
-                    size: widget.size * 0.42,
-                  ),
-                ),
+                child: widget.isLoading
+                    ? SizedBox(
+                        width: widget.size * 0.42,
+                        height: widget.size * 0.42,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 3,
+                          valueColor: AlwaysStoppedAnimation<Color>(fg),
+                        ),
+                      )
+                    : AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 180),
+                        transitionBuilder: (child, anim) => FadeTransition(
+                          opacity: anim,
+                          child: ScaleTransition(scale: anim, child: child),
+                        ),
+                        child: Icon(
+                          widget.isPlaying ? PhosphorIconsFill.pause : PhosphorIconsFill.play,
+                          key: ValueKey<bool>(widget.isPlaying),
+                          color: fg,
+                          size: widget.size * 0.42,
+                        ),
+                      ),
               ),
             ],
           ),
