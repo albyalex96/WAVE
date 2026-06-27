@@ -56,7 +56,7 @@ jobs:
         with:
           tag_name: ${{ steps.tag.outputs.RELEASE_TAG }}
           name: "Wave Enhanced v${{ steps.version.outputs.VERSION }}"
-          body: "APK build from branch \`enhanced\` (commit ${{ github.sha }})"
+          body: "APK build from branch enhanced (commit ${{ github.sha }})"
           draft: false
           prerelease: true
           files: build/app/outputs/flutter-apk/WaveEnhanced-*.apk
