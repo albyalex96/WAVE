@@ -34,16 +34,19 @@ android {
     signingConfigs {
         create("release") {
             val keystoreProps = rootProject.file("key.properties")
-            val props = java.util.Properties()
+            val props = mutableMapOf<String, String>()
             if (keystoreProps.exists()) {
-                props.load(keystoreProps.inputStream())
+                keystoreProps.readLines().forEach { line ->
+                    val idx = line.indexOf('=')
+                    if (idx > 0) {
+                        props[line.substring(0, idx).trim()] = line.substring(idx + 1).trim()
+                    }
+                }
             }
-            storeFile = keystoreProps.parentFile.resolve(
-                props.getProperty("storeFile") ?: "upload-keystore.jks"
-            )
-            storePassword = props.getProperty("storePassword")
-            keyAlias = props.getProperty("keyAlias")
-            keyPassword = props.getProperty("keyPassword")
+            storeFile = keystoreProps.parentFile.resolve(props["storeFile"] ?: "upload-keystore.jks")
+            storePassword = props["storePassword"]
+            keyAlias = props["keyAlias"]
+            keyPassword = props["keyPassword"]
         }
     }
 
